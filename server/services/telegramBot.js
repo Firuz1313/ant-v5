@@ -2,11 +2,12 @@ const TelegramBot = require('node-telegram-bot-api')
 const StatsHelper = require('../utils/statsHelper')
 
 class TelegramBotService {
-  constructor() {
+    constructor() {
     this.token = process.env.TELEGRAM_BOT_TOKEN
     this.bot = null
     this.chatIds = new Set() // Store admin chat IDs
     this.userSessions = new Map() // Track user diagnostic sessions
+    this.statsHelper = new StatsHelper()
     
     if (this.token) {
       this.initBot()
@@ -33,7 +34,7 @@ class TelegramBotService {
     this.bot.setMyCommands([
       { command: 'start', description: 'Начать работу с ботом' },
       { command: 'help', description: 'Показать справку' },
-      { command: 'status', description: 'Статус системы диагностики' },
+      { command: 'status', description: 'Статус системы диагност��ки' },
       { command: 'stats', description: 'Статистика использования' },
       { command: 'users', description: 'Активные пользователи' },
       { command: 'stuck', description: 'Пользователи, застрявшие на шагах' },
@@ -136,7 +137,7 @@ ${status.recentEvents.map(event => `• ${event}`).join('\n')}
 ❌ Незавершенных: ${stats.abandoned}
 🔧 Заявок на мастера: ${stats.masterRequests}
 
-*Популярные приставки:*
+*Популярн��е приставки:*
 ${stats.topDevices.map(device => `• ${device.name}: ${device.count}`).join('\n')}
 
 *Частые ошибки:*
@@ -200,7 +201,7 @@ ${stats.topErrors.map(error => `• ${error.title}: ${error.count}`).join('\n')}
       if (success) {
         this.bot.sendMessage(chatId, `✅ Инструкция отправлена пользователю сессии ${sessionId}`)
       } else {
-        this.bot.sendMessage(chatId, `❌ Не удалось отправить инструкцию. Сессия ${sessionId} не найдена.`)
+        this.bot.sendMessage(chatId, `�� Не удалось отправить инструкцию. Сессия ${sessionId} не найдена.`)
       }
     })
 
