@@ -450,6 +450,8 @@ const toggleOperatorMode = () => {
 }
 
 const getButtonIcon = (buttonId) => {
+  if (!buttonId) return '?'
+
   const icons = {
     'power': '⏻',
     'menu': '☰',
@@ -462,7 +464,7 @@ const getButtonIcon = (buttonId) => {
     'exit': '✕',
     'source': 'SRC'
   }
-  return icons[buttonId] || buttonId.toUpperCase().slice(0, 2)
+  return icons[buttonId] || buttonId.toString().toUpperCase().slice(0, 2)
 }
 
 const getMediaIcon = (type) => {
