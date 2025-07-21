@@ -153,7 +153,12 @@
 
 <script setup>
 // Load devices data
-const { data: devices, refresh: refreshDevices } = await $fetch('/api/devices')
+const devices = await $fetch('/api/devices')
+
+const refreshDevices = async () => {
+  const newDevices = await $fetch('/api/devices')
+  devices.splice(0, devices.length, ...newDevices)
+}
 
 const showCreateModal = ref(false)
 const editingDevice = ref(null)

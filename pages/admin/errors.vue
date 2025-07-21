@@ -128,7 +128,7 @@
                     required
                     class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                   >
-                    <option value="">Выберит�� приставку</option>
+                    <option value="">Выберите приставку</option>
                     <option v-for="device in devices" :key="device.id" :value="device.id">
                       {{ device.name }}
                     </option>
@@ -187,7 +187,7 @@
 
 <script setup>
 // Load devices and errors
-const { data: devices } = await $fetch('/api/devices')
+const devices = await $fetch('/api/devices')
 const allErrors = ref([])
 
 const selectedDeviceId = ref('')
