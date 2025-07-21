@@ -13,7 +13,7 @@
       <div class="max-w-4xl mx-auto">
         <!-- Device Selection -->
         <div v-if="!selectedDevice" class="card p-8">
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
+          <h2 class="text-2xl font-poppins font-semibold text-gray-900 dark:text-white mb-6 text-center leading-tight">
             Выберите вашу ТВ-приставку
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
