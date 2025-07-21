@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       notifications: body.notifications !== undefined ? body.notifications : true,
       autoSync: body.autoSync !== undefined ? body.autoSync : true,
       mediaPath: body.mediaPath || '/uploads',
-      updatedAt: new Date().toISOString()
+      updatedAt: Date.now()
     }
 
     // In production, save to database
