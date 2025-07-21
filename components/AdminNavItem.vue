@@ -1,10 +1,10 @@
 <template>
   <NuxtLink
     :to="to"
-    class="flex items-center transition-colors text-sm font-medium"
+    class="flex items-center transition-all duration-200 text-sm font-medium group"
     :class="sidebar ? sidebarClasses : horizontalClasses"
   >
-    <component :is="iconComponent" class="w-5 h-5 flex-shrink-0" />
+    <component :is="iconComponent" class="w-6 h-6 flex-shrink-0 transition-transform duration-200 group-hover:scale-110" />
     <span>{{ label }}</span>
   </NuxtLink>
 </template>
@@ -36,10 +36,10 @@ const isActive = computed(() => {
 })
 
 const sidebarClasses = computed(() => {
-  const base = 'space-x-3 px-3 py-2 rounded-lg whitespace-nowrap'
+  const base = 'space-x-3 px-3 py-3 rounded-lg whitespace-nowrap transform'
   return isActive.value
-    ? `${base} bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300`
-    : `${base} text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200`
+    ? `${base} bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 shadow-md scale-105`
+    : `${base} text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200 hover:shadow-lg hover:scale-105`
 })
 
 const horizontalClasses = computed(() => {
