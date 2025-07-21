@@ -7,8 +7,30 @@
     font-family: 'Inter', sans-serif;
   }
   
-  body {
+    body {
     @apply bg-gray-50 dark:bg-dark-300 transition-colors duration-300;
+  }
+
+  /* Iframe-specific styles */
+  body.in-iframe {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Prevent hydration mismatches with consistent initial state */
+  .js-loaded {
+    visibility: visible;
+  }
+
+  /* Hide elements until hydration is complete */
+  .theme-toggle {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .js-loaded .theme-toggle {
+    opacity: 1;
   }
 }
 
