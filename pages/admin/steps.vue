@@ -125,7 +125,16 @@
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
+                        <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <input
+                  type="checkbox"
+                  :checked="selectedSteps.length === filteredSteps.length && filteredSteps.length > 0"
+                  :indeterminate="selectedSteps.length > 0 && selectedSteps.length < filteredSteps.length"
+                  @change="toggleSelectAll"
+                  class="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+              </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Порядок
               </th>
@@ -443,7 +452,7 @@ const stepsWithMedia = computed(() => (allSteps.value || []).filter(s => s.media
 
 // Mock recent actions
 const recentActions = ref([
-  { id: 1, description: 'Пользователь прошел шаг "Проверка карты"', timestamp: '2 ми�� назад' },
+  { id: 1, description: 'Пользователь прошел шаг "Проверка карты"', timestamp: '2 мин назад' },
   { id: 2, description: 'Пользователь застрял на шаге "Настройка антенны"', timestamp: '5 мин назад' },
   { id: 3, description: 'Завершена диагностика Openbox GOLD', timestamp: '10 мин назад' }
 ])
