@@ -386,7 +386,7 @@
             >
               <option value="icon">Иконки устройств</option>
               <option value="remote">Пульты управления</option>
-              <option value="step">И��ображения шагов</option>
+              <option value="step">Изображения шагов</option>
               <option value="other">Прочие файлы</option>
             </select>
           </div>
@@ -663,30 +663,43 @@ const uploadFiles = async (files) => {
         // Update progress to 100%
         const progress = uploadProgress.value.find(p => p.id === progressId)
         if (progress) {
-        progress.percent += Math.random() * 30
-        if (progress.percent >= 100) {
           progress.percent = 100
-          clearInterval(interval)
-          
-          // Add to media files
-          setTimeout(() => {
-            mediaFiles.value.unshift({
-              id: Date.now() + Math.random(),
-              name: file.name,
-              url: URL.createObjectURL(file),
-              type: uploadType.value,
-              size: file.size,
-              usedIn: [],
-              uploadDate: new Date().toISOString().split('T')[0]
+
+          // Add uploaded files to media list
+          if (response.files && response.files.length > 0) {
+            response.files.forEach(uploadedFile => {
+              mediaFiles.value.unshift({
+                id: uploadedFile.id,
+                name: uploadedFile.originalName,
+                fileName: uploadedFile.fileName,
+                url: uploadedFile.url,
+                type: uploadedFile.type,
+                category: uploadedFile.category,
+                size: uploadedFile.size,
+                usedIn: [],
+                uploadDate: uploadedFile.uploadedAt.split('T')[0]
+              })
             })
-            
-            // Remove from progress
+          }
+
+          // Remove from progress after delay
+          setTimeout(() => {
             uploadProgress.value = uploadProgress.value.filter(p => p.id !== progressId)
-          }, 500)
+          }, 1000)
         }
+
+        // Reload stats
+        await loadMediaFiles()
       }
-    }, 200)
-  })
+    } catch (error) {
+      console.error('Upload failed:', error)
+      // Mark as failed
+      const progress = uploadProgress.value.find(p => p.id === progressId)
+      if (progress) {
+        progress.error = true
+      }
+    }
+  }
 }
 
 const formatFileSize = (bytes) => {
@@ -720,7 +733,7 @@ onMounted(() => {
 useHead({
   title: 'Медиа-менеджер - Админ панель',
   meta: [
-    { name: 'description', content: 'Управление медиафайлами системы диагностики' }
+    { name: 'description', content: 'Упр��вление медиафайлами системы диагностики' }
   ]
 })
 </script>
