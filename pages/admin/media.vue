@@ -386,7 +386,7 @@
             >
               <option value="icon">Иконки устройств</option>
               <option value="remote">Пульты управления</option>
-              <option value="step">Изображения шагов</option>
+              <option value="step">И��ображения шагов</option>
               <option value="other">Прочие файлы</option>
             </select>
           </div>
@@ -635,8 +635,8 @@ const handleFileSelect = (e) => {
   uploadFiles(files)
 }
 
-const uploadFiles = (files) => {
-  files.forEach(file => {
+const uploadFiles = async (files) => {
+  for (const file of files) {
     const progressId = Date.now() + Math.random()
     uploadProgress.value.push({
       id: progressId,
@@ -644,10 +644,25 @@ const uploadFiles = (files) => {
       percent: 0
     })
 
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      const progress = uploadProgress.value.find(p => p.id === progressId)
-      if (progress) {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await $fetch('/api/admin/media/upload', {
+        method: 'POST',
+        body: formData,
+        onUploadProgress: (progress) => {
+          const progressItem = uploadProgress.value.find(p => p.id === progressId)
+          if (progressItem) {
+            progressItem.percent = Math.round((progress.loaded / progress.total) * 100)
+          }
+        }
+      })
+
+      if (response.success) {
+        // Update progress to 100%
+        const progress = uploadProgress.value.find(p => p.id === progressId)
+        if (progress) {
         progress.percent += Math.random() * 30
         if (progress.percent >= 100) {
           progress.percent = 100
@@ -705,7 +720,7 @@ onMounted(() => {
 useHead({
   title: 'Медиа-менеджер - Админ панель',
   meta: [
-    { name: 'description', content: 'Управлен��е медиафайлами системы диагностики' }
+    { name: 'description', content: 'Управление медиафайлами системы диагностики' }
   ]
 })
 </script>
