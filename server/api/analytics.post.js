@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 // Analytics API endpoint for user action logging
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -13,8 +16,8 @@ export default defineEventHandler(async (event) => {
     // Process analytics data
     const analytics = processAnalytics(body)
     
-    // Here you would typically save to database
-    // await saveAnalytics(analytics)
+        // Save analytics to file
+    await saveAnalytics(analytics)
     
     return {
       success: true,
@@ -157,5 +160,68 @@ function generateFlags(behaviorPatterns, completionAnalysis) {
     flags.push('multiple_stuck_points')
   }
   
-  return flags
+    return flags
+}
+
+async function saveAnalytics(analytics) {
+  try {
+    const dataPath = path.join(process.cwd(), 'data', 'user_logs.json')
+
+    let userData = []
+    if (fs.existsSync(dataPath)) {
+      const fileContent = fs.readFileSync(dataPath, 'utf-8')
+      userData = JSON.parse(fileContent)
+    }
+
+    // Create user log entry
+    const userLogEntry = {
+      sessionId: analytics.sessionId,
+      sessionStart: analytics.summary.startTime ? new Date(analytics.summary.startTime).toISOString() : new Date().toISOString(),
+      sessionEnd: analytics.summary.lastActivity ? new Date(analytics.summary.lastActivity).toISOString() : null,
+      device: extractDeviceFromEvents(analytics.summary),
+      error: extractErrorFromEvents(analytics.summary),
+      completed: analytics.completionAnalysis.completionRate >= 1,
+      currentStep: analytics.summary.stepsViewed,
+      currentStepTitle: getLastStepTitle(analytics),
+      events: analytics.summary.events || [],
+      userAgent: analytics.summary.userAgent,
+      flags: analytics.flags,
+      timestamp: new Date().toISOString()
+    }
+
+    // Find existing entry or add new one
+    const existingIndex = userData.findIndex(entry => entry.sessionId === analytics.sessionId)
+    if (existingIndex !== -1) {
+      userData[existingIndex] = userLogEntry
+    } else {
+      userData.push(userLogEntry)
+    }
+
+    // Write back to file
+    fs.writeFileSync(dataPath, JSON.stringify(userData, null, 2), 'utf-8')
+
+    console.log(`Analytics saved for session ${analytics.sessionId}`)
+  } catch (error) {
+    console.error('Failed to save analytics:', error)
+  }
+}
+
+function extractDeviceFromEvents(summary) {
+  // Extract device info from first event or summary
+  if (summary.deviceId) return summary.deviceId
+  return 'Неизвестно'
+}
+
+function extractErrorFromEvents(summary) {
+  // Extract error info from first event or summary
+  if (summary.errorId) return summary.errorId
+  return 'Неизвестно'
+}
+
+function getLastStepTitle(analytics) {
+  const stepEvents = analytics.summary.events?.filter(e => e.type === 'step_action' && e.stepTitle) || []
+  if (stepEvents.length > 0) {
+    return stepEvents[stepEvents.length - 1].stepTitle
+  }
+  return null
 }

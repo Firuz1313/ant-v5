@@ -5,7 +5,7 @@
         <h1 class="text-4xl lg:text-6xl font-poppins font-bold text-gray-900 dark:text-white mb-4">
           Диагностика ТВ-приставок
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-inter">
           Пр��стое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
         </p>
       </div>
@@ -13,7 +13,7 @@
       <div class="max-w-4xl mx-auto">
         <!-- Device Selection -->
         <div v-if="!selectedDevice" class="card p-8">
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
+          <h2 class="text-2xl font-poppins font-semibold text-gray-900 dark:text-white mb-6 text-center leading-tight">
             Выберите вашу ТВ-приставку
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -24,7 +24,13 @@
               class="device-card cursor-pointer p-6 text-center card hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               <div class="w-16 h-16 mx-auto mb-4 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
-                <span v-if="device.icon" class="text-3xl">{{ device.icon }}</span>
+                <img
+                  v-if="device.display_icon && device.display_icon.startsWith('/')"
+                  :src="device.display_icon"
+                  :alt="device.name"
+                  class="w-12 h-12 object-contain"
+                >
+                <span v-else-if="device.display_icon" class="text-3xl">{{ device.display_icon }}</span>
                 <svg v-else class="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                 </svg>
@@ -108,8 +114,21 @@
 </template>
 
 <script setup>
+// Import settings store for admin-site synchronization
+const settingsStore = useSettingsStore()
+
 // Load devices from API using useLazyFetch for SSR compatibility
-const { data: devices } = await useLazyFetch('/api/devices')
+const { data: devices, refresh: refreshDevices } = await useLazyFetch('/api/devices', {
+  key: 'devices',
+  default: () => []
+})
+
+// Load settings to ensure synchronization
+onMounted(async () => {
+  await settingsStore.loadSettings()
+  // Refresh devices to apply any new settings
+  await refreshDevices()
+})
 
 // Load errors when device is selected
 const errors = ref([])

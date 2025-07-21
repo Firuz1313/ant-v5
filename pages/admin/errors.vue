@@ -4,7 +4,7 @@
       <div>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Управление ошибками</h1>
         <p class="mt-2 text-gray-600 dark:text-gray-400">
-          Настройте типы ошибок для каждой приставки
+          Настройт�� типы ошибок для каждой приставки
         </p>
       </div>
       <button
@@ -66,7 +66,28 @@
                 {{ getDeviceName(error.device_id) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                {{ error.title }}
+                <div class="flex items-center space-x-2">
+                  <span class="text-lg">{{ error.icon || '⚠️' }}</span>
+                  <span>{{ error.title }}</span>
+                  <span
+                    v-if="error.severity === 'high'"
+                    class="px-2 py-1 text-xs bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 rounded-full"
+                  >
+                    Высокий
+                  </span>
+                  <span
+                    v-else-if="error.severity === 'medium'"
+                    class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100 rounded-full"
+                  >
+                    Средний
+                  </span>
+                  <span
+                    v-else-if="error.severity === 'low'"
+                    class="px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 rounded-full"
+                  >
+                    Низкий
+                  </span>
+                </div>
               </td>
               <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                 {{ error.description }}
@@ -159,6 +180,43 @@
                     placeholder="Подробное описание проблемы"
                   ></textarea>
                 </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Иконка
+                    </label>
+                    <select
+                      v-model="errorForm.icon"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="⚠️">⚠️ Предупреждение</option>
+                      <option value="📵">📵 Нет сигнала</option>
+                      <option value="🔇">🔇 Нет звука</option>
+                      <option value="📺">📺 Изображение</option>
+                      <option value="🔌">🔌 Питание</option>
+                      <option value="💾">💾 Запись</option>
+                      <option value="🌐">🌐 Интернет</option>
+                      <option value="❄️">❄️ Зависание</option>
+                      <option value="🐌">🐌 Медленно</option>
+                      <option value="🔒">🔒 Закодировано</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Приоритет
+                    </label>
+                    <select
+                      v-model="errorForm.severity"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="low">Низкий</option>
+                      <option value="medium">Средний</option>
+                      <option value="high">Высокий</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -188,7 +246,7 @@
 <script setup>
 // Load devices and errors using useLazyFetch for SSR compatibility
 const { data: devices } = await useLazyFetch('/api/devices')
-const allErrors = ref([])
+const { data: allErrors, refresh: refreshErrors } = await useLazyFetch('/api/errors/all')
 
 const selectedDeviceId = ref('')
 const showCreateModal = ref(false)
@@ -198,21 +256,9 @@ const loading = ref(false)
 const errorForm = ref({
   device_id: '',
   title: '',
-  description: ''
-})
-
-// Load all errors for all devices
-onMounted(async () => {
-    if (devices.value) {
-    const errorPromises = devices.value.map(device => 
-    $fetch(`/api/errors/${device.id}`).then(errors => 
-      errors.map(error => ({ ...error, device_id: device.id }))
-    )
-  )
-  
-      const errorArrays = await Promise.all(errorPromises)
-    allErrors.value = errorArrays.flat()
-  }
+  description: '',
+  icon: '⚠️',
+  severity: 'medium'
 })
 
 const filteredErrors = computed(() => {
@@ -230,7 +276,9 @@ const editError = (error) => {
   errorForm.value = {
     device_id: error.device_id,
     title: error.title,
-    description: error.description
+    description: error.description,
+    icon: error.icon || '⚠️',
+    severity: error.severity || 'medium'
   }
 }
 
@@ -240,7 +288,9 @@ const closeModal = () => {
   errorForm.value = {
     device_id: '',
     title: '',
-    description: ''
+    description: '',
+    icon: '⚠️',
+    severity: 'medium'
   }
 }
 
@@ -249,17 +299,23 @@ const saveError = async () => {
   try {
     if (editingError.value) {
       // Update existing error
-      console.log('Updating error:', errorForm.value)
+      await $fetch(`/api/admin/error/${editingError.value.id}`, {
+        method: 'PUT',
+        body: errorForm.value
+      })
     } else {
       // Create new error
-      console.log('Creating error:', errorForm.value)
+      await $fetch('/api/admin/error', {
+        method: 'POST',
+        body: errorForm.value
+      })
     }
-    
+
+    await refreshErrors()
     closeModal()
-    // Refresh errors list
   } catch (error) {
     console.error('Error saving error:', error)
-    alert('Ошибка при сохранении')
+    alert('Ошибка при сохранении ошибки')
   }
   loading.value = false
 }
@@ -268,17 +324,16 @@ const deleteError = async (error) => {
   if (!confirm(`Вы уверены, что хотите удалить ошибку "${error.title}"?`)) {
     return
   }
-  
+
   try {
-    console.log('Deleting error:', error.id)
-    // Remove from local list
-    const index = allErrors.value.findIndex(e => e.id === error.id)
-    if (index > -1) {
-      allErrors.value.splice(index, 1)
-    }
+    await $fetch(`/api/admin/error/${error.id}`, {
+      method: 'DELETE'
+    })
+
+    await refreshErrors()
   } catch (error) {
     console.error('Error deleting error:', error)
-    alert('Ошибка при удалении')
+    alert('Ошибка при удалении ошибки')
   }
 }
 

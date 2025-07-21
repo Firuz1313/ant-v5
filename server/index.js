@@ -2,6 +2,7 @@ const express = require('express')
 const sqlite3 = require('sqlite3').verbose()
 const path = require('path')
 const cors = require('cors')
+const TelegramBotService = require('./services/telegramBot')
 
 const app = express()
 const PORT = process.env.PORT || 3002
@@ -20,6 +21,10 @@ const db = new sqlite3.Database(path.join(__dirname, 'database.sqlite'), (err) =
     initializeDatabase()
   }
 })
+
+// Initialize Telegram Bot
+const telegramBot = TelegramBotService.getInstance()
+console.log('Telegram bot service initialized')
 
 // Database initialization
 function initializeDatabase() {

@@ -103,6 +103,43 @@
       </div>
     </div>
 
+        <!-- Bulk Actions -->
+    <div v-if="selectedSteps.length > 0" class="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200">
+            Выбрано шагов: {{ selectedSteps.length }}
+          </span>
+          <div class="flex items-center space-x-2">
+            <button
+              @click="bulkDelete"
+              class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+            >
+              🗑️ Удалить выбранные
+            </button>
+            <button
+              @click="bulkToggleOperator"
+              class="text-sm text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
+            >
+              🔒 Переключить "Только оператор"
+            </button>
+            <button
+              @click="bulkExport"
+              class="text-sm text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+            >
+              📄 Экспортировать выбранные
+            </button>
+          </div>
+        </div>
+        <button
+          @click="clearSelection"
+          class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+        >
+          Отменить выбор
+        </button>
+      </div>
+    </div>
+
     <!-- Steps table -->
     <div class="card overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -125,7 +162,16 @@
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
+                        <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <input
+                  type="checkbox"
+                  :checked="selectedSteps.length === filteredSteps.length && filteredSteps.length > 0"
+                  :indeterminate="selectedSteps.length > 0 && selectedSteps.length < filteredSteps.length"
+                  @change="toggleSelectAll"
+                  class="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+              </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Порядок
               </th>
@@ -151,8 +197,22 @@
               v-for="step in filteredSteps" 
               :key="step.id"
               :class="{ 'opacity-50': step.onlyForOperator && !operatorMode }"
-              class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-move"
+              draggable="true"
+              @dragstart="handleDragStart(step, $event)"
+              @dragover.prevent
+              @drop="handleDrop(step, $event)"
             >
+                            <!-- Checkbox -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  :value="step.id"
+                  v-model="selectedSteps"
+                  class="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+              </td>
+
               <!-- Order -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center space-x-2">
@@ -339,7 +399,7 @@
             <span class="font-semibold text-gray-900 dark:text-white">{{ stepsWithAlternatives }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-600 dark:text-gray-400">С медиа:</span>
+            <span class="text-sm text-gray-600 dark:text-gray-400">С мед��а:</span>
             <span class="font-semibold text-gray-900 dark:text-white">{{ stepsWithMedia }}</span>
           </div>
         </div>
@@ -375,7 +435,7 @@
 // Load initial data
 const { data: devices } = await useLazyFetch('/api/devices')
 const { data: allErrors } = await useLazyFetch('/api/errors/all')
-const { data: allSteps } = await useLazyFetch('/api/steps/all')
+const { data: allSteps, refresh: refreshSteps } = await useLazyFetch('/api/steps/all')
 
 // Reactive state
 const searchQuery = ref('')
@@ -386,6 +446,7 @@ const operatorMode = ref(false)
 const showCreateModal = ref(false)
 const showPreviewModal = ref(false)
 const editingStep = ref(null)
+const selectedSteps = ref([])
 
 // Computed properties
 const filteredErrors = computed(() => {
@@ -540,6 +601,133 @@ const exportSteps = () => {
   const a = document.createElement('a')
   a.href = url
   a.download = 'steps_export.json'
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+// Drag and drop functionality
+let draggedStep = null
+
+const handleDragStart = (step, event) => {
+  draggedStep = step
+  event.dataTransfer.effectAllowed = 'move'
+  event.target.style.opacity = '0.5'
+}
+
+const handleDrop = async (targetStep, event) => {
+  event.preventDefault()
+  event.target.style.opacity = '1'
+
+  if (!draggedStep || draggedStep.id === targetStep.id) {
+    return
+  }
+
+  try {
+    // Update order indices
+    const draggedIndex = draggedStep.order_index
+    const targetIndex = targetStep.order_index
+
+    await $fetch('/api/admin/steps/reorder', {
+      method: 'POST',
+      body: {
+        draggedStepId: draggedStep.id,
+        targetStepId: targetStep.id,
+        draggedIndex,
+        targetIndex
+      }
+    })
+
+    // Refresh steps to show new order
+    await refreshSteps()
+
+  } catch (error) {
+    console.error('Failed to reorder steps:', error)
+    alert('Ошибка при изменении порядка шагов')
+    } finally {
+    draggedStep = null
+  }
+}
+
+// Bulk operations
+const toggleSelectAll = () => {
+  if (selectedSteps.value.length === filteredSteps.value.length) {
+    selectedSteps.value = []
+  } else {
+    selectedSteps.value = filteredSteps.value.map(step => step.id)
+  }
+}
+
+const clearSelection = () => {
+  selectedSteps.value = []
+}
+
+const bulkDelete = async () => {
+  const count = selectedSteps.value.length
+  if (!confirm(`Удалить ${count} выбранных шагов? Это действие нельзя отменить.`)) {
+    return
+  }
+
+  try {
+    await Promise.all(
+      selectedSteps.value.map(stepId =>
+        $fetch(`/api/admin/step/${stepId}`, { method: 'DELETE' })
+      )
+    )
+
+    await refreshSteps()
+    selectedSteps.value = []
+
+  } catch (error) {
+    console.error('Failed to delete steps:', error)
+    alert('Ошибка при удалении шагов')
+  }
+}
+
+const bulkToggleOperator = async () => {
+  const count = selectedSteps.value.length
+  if (!confirm(`Переключить режим "Только оператор" для ${count} выбранных шагов?`)) {
+    return
+  }
+
+  try {
+    const selectedStepObjects = filteredSteps.value.filter(step =>
+      selectedSteps.value.includes(step.id)
+    )
+
+    await Promise.all(
+      selectedStepObjects.map(step =>
+        $fetch(`/api/admin/step/${step.id}`, {
+          method: 'PUT',
+          body: {
+            ...step,
+            onlyForOperator: !step.onlyForOperator
+          }
+        })
+      )
+    )
+
+    await refreshSteps()
+    selectedSteps.value = []
+
+  } catch (error) {
+    console.error('Failed to toggle operator mode:', error)
+    alert('Ошибка при изменении режима оператора')
+  }
+}
+
+const bulkExport = () => {
+  const selectedStepObjects = filteredSteps.value.filter(step =>
+    selectedSteps.value.includes(step.id)
+  )
+
+  const data = JSON.stringify(selectedStepObjects, null, 2)
+  const blob = new Blob([data], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `selected_steps_${selectedSteps.value.length}.json`
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)

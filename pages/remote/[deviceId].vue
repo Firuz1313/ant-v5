@@ -34,13 +34,16 @@
         <!-- Remote Control (Left/Center) -->
         <div class="lg:col-span-1 flex justify-center">
           <div class="space-y-6">
-            <!-- Device Remote Image (if available) -->
-            <div v-if="deviceInfo?.remote_image" class="text-center">
-              <img 
-                :src="deviceInfo.remote_image" 
-                :alt="`Пульт ${deviceInfo.name}`"
+            <!-- Device Remote Image (with fallback to settings default) -->
+            <div v-if="displayRemoteImage" class="text-center">
+              <img
+                :src="displayRemoteImage"
+                :alt="`Пульт ${deviceInfo?.name || 'устройства'}`"
                 class="max-w-xs mx-auto rounded-lg shadow-lg"
               />
+              <p v-if="isUsingDefaultRemote" class="text-xs text-gray-400 mt-2">
+                Пульт по умолчанию
+              </p>
             </div>
 
             <!-- Interactive Remote Control -->
@@ -209,15 +212,34 @@
 <script setup>
 const route = useRoute()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 
 // Get device ID from route
 const deviceId = computed(() => route.params.deviceId)
 
 // Load device data
 const { data: devices } = await useLazyFetch('/api/devices')
-const deviceInfo = computed(() => 
+const deviceInfo = computed(() =>
   devices.value?.find(device => device.id == deviceId.value)
 )
+
+// Load settings for default remote
+onMounted(async () => {
+  await settingsStore.loadSettings()
+})
+
+// Computed properties for remote display
+const displayRemoteImage = computed(() => {
+  // Use device-specific remote if available, otherwise use default from settings
+  return deviceInfo.value?.display_remote ||
+         deviceInfo.value?.remote_image ||
+         settingsStore.getDefaultRemote.value?.url ||
+         null
+})
+
+const isUsingDefaultRemote = computed(() => {
+  return !deviceInfo.value?.remote_image && settingsStore.getDefaultRemote.value
+})
 
 // Load errors for this device
 const { data: errors } = await useLazyFetch(`/api/errors/${deviceId.value}`)

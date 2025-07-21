@@ -256,7 +256,7 @@
             <span class="font-semibold text-gray-900 dark:text-white">{{ analytics.userBehavior?.operatorInterventions || 0 }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-600 dark:text-gray-400">Использование альтернатив:</span>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Использование ал��тернатив:</span>
             <span class="font-semibold text-gray-900 dark:text-white">{{ analytics.userBehavior?.alternativePathUsage || 0 }}</span>
           </div>
         </div>
@@ -421,7 +421,12 @@ const realTimeStats = ref({
   masterRequests: 5
 })
 
-const lastUpdated = ref(new Date().toLocaleTimeString('ru-RU'))
+const lastUpdated = ref('')
+
+// Set lastUpdated only on client side to avoid hydration mismatch
+onMounted(() => {
+  lastUpdated.value = new Date().toLocaleTimeString('ru-RU')
+})
 
 // Computed properties
 const maxDeviceSessions = computed(() => {
@@ -484,10 +489,12 @@ watch(timeRange, loadAnalytics)
 
 // Auto-refresh real-time stats
 const refreshRealTimeStats = () => {
+  // Use deterministic values to avoid hydration mismatch
+  const baseTime = Math.floor(Date.now() / 60000) // Changes every minute
   realTimeStats.value = {
-    activeSessions: Math.floor(Math.random() * 20) + 5,
-    stuckUsers: Math.floor(Math.random() * 10),
-    masterRequests: Math.floor(Math.random() * 15) + 2
+    activeSessions: (baseTime % 20) + 5,
+    stuckUsers: (baseTime % 10),
+    masterRequests: (baseTime % 15) + 2
   }
   lastUpdated.value = new Date().toLocaleTimeString('ru-RU')
 }
