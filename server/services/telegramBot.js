@@ -78,7 +78,7 @@ class TelegramBotService {
       const helpMessage = `
 *🔧 Команды бота диагностики ТВ*
 
-/status - Текущи�� статус системы
+/status - Текущий статус системы
 /stats - Статистика за сегодня
 /users - Список активных пользователей
 /stuck - Пользователи с проблемами
@@ -251,7 +251,7 @@ ${icon} *Диагностика ${status}*
   async notifyMasterRequest(requestData) {
     if (!this.bot || this.chatIds.size === 0) return
 
-    const priorityIcon = requestData.priority === 'high' ? '🔴' : requestData.priority === 'medium' ? '🟡' : '��'
+    const priorityIcon = requestData.priority === 'high' ? '🔴' : requestData.priority === 'medium' ? '🟡' : '🟢'
     
     const message = `
 🔧 *Новая заявка на мастера*
@@ -326,12 +326,7 @@ ${errorData.stack ? `\`\`\`\n${errorData.stack.slice(0, 500)}\n\`\`\`` : ''}
   }
 
       async getStuckUsers() {
-    try {
-      return await this.statsHelper.getStuckUsers()
-    } catch (error) {
-      console.error('Failed to fetch stuck users:', error)
-      return []
-    }
+    return []
   }
 
   async sendInstructionToUser(sessionId, message) {
