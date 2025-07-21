@@ -66,7 +66,28 @@
                 {{ getDeviceName(error.device_id) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                {{ error.title }}
+                <div class="flex items-center space-x-2">
+                  <span class="text-lg">{{ error.icon || '⚠️' }}</span>
+                  <span>{{ error.title }}</span>
+                  <span
+                    v-if="error.severity === 'high'"
+                    class="px-2 py-1 text-xs bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 rounded-full"
+                  >
+                    Высокий
+                  </span>
+                  <span
+                    v-else-if="error.severity === 'medium'"
+                    class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100 rounded-full"
+                  >
+                    Средний
+                  </span>
+                  <span
+                    v-else-if="error.severity === 'low'"
+                    class="px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 rounded-full"
+                  >
+                    Низкий
+                  </span>
+                </div>
               </td>
               <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                 {{ error.description }}
@@ -173,7 +194,7 @@
                       <option value="📵">📵 Нет сигнала</option>
                       <option value="🔇">🔇 Нет звука</option>
                       <option value="📺">📺 Изображение</option>
-                      <option value="🔌">���� Питание</option>
+                      <option value="🔌">🔌 Питание</option>
                       <option value="💾">💾 Запись</option>
                       <option value="🌐">🌐 Интернет</option>
                       <option value="❄️">❄️ Зависание</option>
