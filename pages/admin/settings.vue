@@ -144,7 +144,7 @@
                 </div>
               </div>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                Этот пульт будет использоваться в диагностике для всех устройств без собственного пульта
+                ��тот пульт будет использоваться в диагностике для всех устройств без собственного пульта
               </p>
             </div>
           </div>
@@ -237,7 +237,7 @@
                   />
                   <div>
                     <div class="text-sm font-medium text-gray-900 dark:text-white">Режим оператора</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">Дополнительные функции для операторов</div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">Дополнительн��е функции для операторов</div>
                   </div>
                 </label>
 
@@ -290,7 +290,7 @@
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                 </svg>
               </div>
-              <span>Интегра��ия с Telegram</span>
+              <span>Интеграция с Telegram</span>
             </h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Настройка бота для уведомлений и поддержки
@@ -757,15 +757,17 @@ const saveSettings = async () => {
       defaultRemote: selectedRemote.value
     }
 
-    const response = await $fetch('/api/admin/settings', {
-      method: 'POST',
-      body: settingsData
-    })
+    // Save through store for proper synchronization
+    const result = await settingsStore.saveSettings(settingsData)
 
-    if (response.success) {
+    if (result.success) {
       console.log('✅ Настройки успешно сохранены!')
-      // Show success notification
-      showNotification('success', 'Настройки успешно сохранены!')
+      showNotification('success', result.message)
+
+      // Update local state to match store
+      settings.value = { ...settingsStore.settings }
+    } else {
+      showNotification('error', result.message || 'Ошибка сохранения настроек')
     }
   } catch (error) {
     console.error('Failed to save settings:', error)
