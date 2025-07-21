@@ -295,17 +295,23 @@ const saveError = async () => {
   try {
     if (editingError.value) {
       // Update existing error
-      console.log('Updating error:', errorForm.value)
+      await $fetch(`/api/admin/error/${editingError.value.id}`, {
+        method: 'PUT',
+        body: errorForm.value
+      })
     } else {
       // Create new error
-      console.log('Creating error:', errorForm.value)
+      await $fetch('/api/admin/error', {
+        method: 'POST',
+        body: errorForm.value
+      })
     }
-    
+
+    await refreshErrors()
     closeModal()
-    // Refresh errors list
   } catch (error) {
     console.error('Error saving error:', error)
-    alert('Ошибка при сохранении')
+    alert('Ошибка при сохранении ошибки')
   }
   loading.value = false
 }
@@ -314,17 +320,16 @@ const deleteError = async (error) => {
   if (!confirm(`Вы уверены, что хотите удалить ошибку "${error.title}"?`)) {
     return
   }
-  
+
   try {
-    console.log('Deleting error:', error.id)
-    // Remove from local list
-    const index = allErrors.value.findIndex(e => e.id === error.id)
-    if (index > -1) {
-      allErrors.value.splice(index, 1)
-    }
+    await $fetch(`/api/admin/error/${error.id}`, {
+      method: 'DELETE'
+    })
+
+    await refreshErrors()
   } catch (error) {
     console.error('Error deleting error:', error)
-    alert('Ошибка при удалении')
+    alert('Ошибка при удалении ошибки')
   }
 }
 
