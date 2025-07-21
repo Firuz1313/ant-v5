@@ -147,7 +147,7 @@
             <div v-else class="text-center">
               <div class="text-8xl mb-6">📺</div>
               <h3 class="text-3xl font-semibold mb-4">Готов к диагн��стике</h3>
-              <p class="text-xl text-gray-400">Выберите проблему для начала</p>
+              <p class="text-xl text-gray-400">Выберите проблему ��ля начала</p>
             </div>
           </div>
 
@@ -188,7 +188,7 @@
               @click="completeSteps"
               class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
             >
-              ��� Завершить
+              ✅ Завершить
             </button>
           </div>
         </div>
@@ -629,11 +629,8 @@ const submitMasterRequest = async () => {
   isSubmittingRequest.value = true
 
   try {
-    // Import user logger
-    const { requestMaster } = useUserLogger()
-
     // Submit request
-    const requestId = await requestMaster(
+    const requestId = await userLogger.requestMaster(
       masterRequest.value.priority,
       masterRequest.value.contact,
       getPriorityEstimate(masterRequest.value.priority)
