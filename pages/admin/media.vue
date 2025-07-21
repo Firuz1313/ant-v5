@@ -516,7 +516,7 @@ const mediaFiles = ref([
     url: '/images/universal-remote.png',
     type: 'remote',
     size: 156780,
-    usedIn: ['Универсальный пульт'],
+    usedIn: ['Уни��ерсальный пульт'],
     uploadDate: '2024-01-11'
   },
   // Add more mock data...
@@ -637,7 +637,7 @@ const handleFileSelect = (e) => {
 
 const uploadFiles = async (files) => {
   for (const file of files) {
-    const progressId = Date.now() + Math.random()
+    const progressId = `upload-${file.name}-${file.size}`
     uploadProgress.value.push({
       id: progressId,
       name: file.name,
@@ -733,7 +733,7 @@ onMounted(() => {
 useHead({
   title: 'Медиа-менеджер - Админ панель',
   meta: [
-    { name: 'description', content: 'Упр��вление медиафайлами системы диагностики' }
+    { name: 'description', content: 'Управление медиафайлами системы диагностики' }
   ]
 })
 </script>
