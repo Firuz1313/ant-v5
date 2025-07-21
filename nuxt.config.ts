@@ -1,13 +1,19 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-    modules: [
+  devtools: {
+    enabled: process.env.NODE_ENV === 'development',
+    vscode: {}
+  },
+  ssr: true,
+  modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@vueuse/nuxt'
   ],
   colorMode: {
-    classSuffix: ''
+    classSuffix: '',
+    preference: 'light',
+    fallback: 'light'
   },
   css: ['~/assets/css/main.css'],
   app: {
