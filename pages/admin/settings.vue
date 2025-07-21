@@ -673,22 +673,27 @@ const resetRemote = () => {
 
 const saveSettings = async () => {
   saving.value = true
-  
+
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Here would be the API call to save settings
-    console.log('Settings saved:', {
+    const settingsData = {
       ...settings.value,
-      selectedDeviceIcon: selectedDeviceIcon.value,
-      selectedRemote: selectedRemote.value
+      defaultDeviceIcon: selectedDeviceIcon.value,
+      defaultRemote: selectedRemote.value
+    }
+
+    const response = await $fetch('/api/admin/settings', {
+      method: 'POST',
+      body: settingsData
     })
-    
-    // Success notification
-    console.log('✅ Настройки успешно сохранены!')
+
+    if (response.success) {
+      console.log('✅ Настройки успешно сохранены!')
+      // Show success notification
+      showNotification('success', 'Настройки успешно сохранены!')
+    }
   } catch (error) {
     console.error('Failed to save settings:', error)
-    alert('❌ Ошибка сохранения настроек')
+    showNotification('error', 'Ошибка сохранения настроек')
   } finally {
     saving.value = false
   }
