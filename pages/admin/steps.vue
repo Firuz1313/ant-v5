@@ -18,7 +18,7 @@
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           ]"
         >
-          {{ operatorMode ? '👤 Режим оператора' : '👥 Режим пользов��теля' }}
+          {{ operatorMode ? '👤 Режим оператора' : '👥 Режим пользователя' }}
         </button>
         <button
           @click="showPreviewModal = true"
@@ -645,9 +645,93 @@ const handleDrop = async (targetStep, event) => {
   } catch (error) {
     console.error('Failed to reorder steps:', error)
     alert('Ошибка при изменении порядка шагов')
-  } finally {
+    } finally {
     draggedStep = null
   }
+}
+
+// Bulk operations
+const toggleSelectAll = () => {
+  if (selectedSteps.value.length === filteredSteps.value.length) {
+    selectedSteps.value = []
+  } else {
+    selectedSteps.value = filteredSteps.value.map(step => step.id)
+  }
+}
+
+const clearSelection = () => {
+  selectedSteps.value = []
+}
+
+const bulkDelete = async () => {
+  const count = selectedSteps.value.length
+  if (!confirm(`Удалить ${count} выбранных шагов? Это действие нельзя отменить.`)) {
+    return
+  }
+
+  try {
+    await Promise.all(
+      selectedSteps.value.map(stepId =>
+        $fetch(`/api/admin/step/${stepId}`, { method: 'DELETE' })
+      )
+    )
+
+    await refreshSteps()
+    selectedSteps.value = []
+
+  } catch (error) {
+    console.error('Failed to delete steps:', error)
+    alert('Ошибка при удалении шагов')
+  }
+}
+
+const bulkToggleOperator = async () => {
+  const count = selectedSteps.value.length
+  if (!confirm(`Переключить режим "Только оператор" для ${count} выбранных шагов?`)) {
+    return
+  }
+
+  try {
+    const selectedStepObjects = filteredSteps.value.filter(step =>
+      selectedSteps.value.includes(step.id)
+    )
+
+    await Promise.all(
+      selectedStepObjects.map(step =>
+        $fetch(`/api/admin/step/${step.id}`, {
+          method: 'PUT',
+          body: {
+            ...step,
+            onlyForOperator: !step.onlyForOperator
+          }
+        })
+      )
+    )
+
+    await refreshSteps()
+    selectedSteps.value = []
+
+  } catch (error) {
+    console.error('Failed to toggle operator mode:', error)
+    alert('Ошибка при изменении режима оператора')
+  }
+}
+
+const bulkExport = () => {
+  const selectedStepObjects = filteredSteps.value.filter(step =>
+    selectedSteps.value.includes(step.id)
+  )
+
+  const data = JSON.stringify(selectedStepObjects, null, 2)
+  const blob = new Blob([data], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `selected_steps_${selectedSteps.value.length}.json`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
 }
 
 // Meta tags
