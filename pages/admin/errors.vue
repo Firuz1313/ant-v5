@@ -203,14 +203,16 @@ const errorForm = ref({
 
 // Load all errors for all devices
 onMounted(async () => {
-  const errorPromises = devices.map(device => 
+    if (devices.value) {
+    const errorPromises = devices.value.map(device => 
     $fetch(`/api/errors/${device.id}`).then(errors => 
       errors.map(error => ({ ...error, device_id: device.id }))
     )
   )
   
-  const errorArrays = await Promise.all(errorPromises)
-  allErrors.value = errorArrays.flat()
+      const errorArrays = await Promise.all(errorPromises)
+    allErrors.value = errorArrays.flat()
+  }
 })
 
 const filteredErrors = computed(() => {
@@ -219,7 +221,7 @@ const filteredErrors = computed(() => {
 })
 
 const getDeviceName = (deviceId) => {
-  const device = devices.find(d => d.id === deviceId)
+  const device = devices.value?.find(d => d.id === deviceId)
   return device ? device.name : 'Неизвестно'
 }
 
