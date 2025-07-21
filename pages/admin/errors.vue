@@ -136,7 +136,7 @@
           <form @submit.prevent="saveError" @click.stop>
             <div class="bg-white dark:bg-dark-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">
-                {{ editingError ? 'Редактировать ошибку' : 'Д��бавить ошибку' }}
+                {{ editingError ? 'Редактировать ошибку' : 'Добавить ошибку' }}
               </h3>
               
               <div class="space-y-4">
@@ -288,7 +288,9 @@ const closeModal = () => {
   errorForm.value = {
     device_id: '',
     title: '',
-    description: ''
+    description: '',
+    icon: '⚠️',
+    severity: 'medium'
   }
 }
 
