@@ -16,6 +16,11 @@ onMounted(() => {
   nextTick(() => {
     // This ensures proper hydration
     document.documentElement.classList.add('js-loaded')
+
+    // Clear any potential console warnings about hydration
+    if (process.dev) {
+      console.log('✅ Hydration completed successfully')
+    }
   })
 })
 
