@@ -24,7 +24,7 @@
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
           </svg>
-          <span>{{ selectMode ? 'Отм��на' : 'Выбрать' }}</span>
+          <span>{{ selectMode ? 'Отмена' : 'Выбрать' }}</span>
         </button>
         
         <button
@@ -448,10 +448,31 @@ const stats = ref({
   total: 0,
   icons: 0,
   remotes: 0,
-  steps: 114
+  steps: 0
 })
 
-// Mock media data
+// Load media files from API
+const loadMediaFiles = async () => {
+  isLoading.value = true
+  try {
+    const response = await $fetch('/api/admin/media')
+    if (response.success) {
+      mediaFiles.value = response.files
+      stats.value = response.stats
+    }
+  } catch (error) {
+    console.error('Failed to load media files:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Load media on mount
+onMounted(() => {
+  loadMediaFiles()
+})
+
+// Mock media data (fallback)
 const mediaFiles = ref([
   {
     id: 1,
@@ -684,7 +705,7 @@ onMounted(() => {
 useHead({
   title: 'Медиа-менеджер - Админ панель',
   meta: [
-    { name: 'description', content: 'Управление медиафайлами системы диагностики' }
+    { name: 'description', content: 'Управлен��е медиафайлами системы диагностики' }
   ]
 })
 </script>
