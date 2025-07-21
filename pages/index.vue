@@ -87,21 +87,25 @@
 </template>
 
 <script setup>
-// Load devices from API
-const devices = await $fetch('/api/devices')
+// Load devices from API using useLazyFetch for SSR compatibility
+const { data: devices } = await useLazyFetch('/api/devices')
 
 // Load errors when device is selected
 const errors = ref([])
+const selectedDevice = ref(null)
+const selectedError = ref(null)
 
 watch(selectedDevice, async (newDevice) => {
   if (newDevice) {
-    const errorData = await $fetch(`/api/errors/${newDevice.id}`)
-    errors.value = errorData
+    try {
+      const errorData = await $fetch(`/api/errors/${newDevice.id}`)
+      errors.value = errorData
+    } catch (error) {
+      console.error('Failed to load errors:', error)
+      errors.value = []
+    }
   }
 })
-
-const selectedDevice = ref(null)
-const selectedError = ref(null)
 
 const selectDevice = (device) => {
   selectedDevice.value = device
