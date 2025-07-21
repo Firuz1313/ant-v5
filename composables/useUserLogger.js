@@ -308,7 +308,7 @@ export const useUserLogger = () => {
     localStorage.setItem('diagnostic_events', JSON.stringify(filteredEvents))
   }
 
-  return {
+    return {
     userEvents: readonly(userEvents),
     sessionId: readonly(sessionId),
     initSession,
@@ -323,6 +323,8 @@ export const useUserLogger = () => {
     downloadReport,
     sendAnalytics,
     getStuckAnalysis,
-    cleanupOldEvents
+    cleanupOldEvents,
+    requestMaster,
+    sendTelegramNotification
   }
 }
