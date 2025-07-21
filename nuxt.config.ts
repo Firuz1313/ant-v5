@@ -36,12 +36,17 @@ export default defineNuxtConfig({
       apiBase: '/api'
     }
   },
-  experimental: {
+    experimental: {
     payloadExtraction: false
   },
   nitro: {
     experimental: {
       wasm: false
+    }
+  },
+  vite: {
+    define: {
+      __NUXT_DEVTOOLS_DISABLE__: true
     }
   }
 })
