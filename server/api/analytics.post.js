@@ -16,8 +16,8 @@ export default defineEventHandler(async (event) => {
     // Process analytics data
     const analytics = processAnalytics(body)
     
-    // Here you would typically save to database
-    // await saveAnalytics(analytics)
+        // Save analytics to file
+    await saveAnalytics(analytics)
     
     return {
       success: true,
