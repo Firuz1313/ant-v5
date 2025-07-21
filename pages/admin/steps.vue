@@ -103,6 +103,43 @@
       </div>
     </div>
 
+        <!-- Bulk Actions -->
+    <div v-if="selectedSteps.length > 0" class="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200">
+            Выбрано шагов: {{ selectedSteps.length }}
+          </span>
+          <div class="flex items-center space-x-2">
+            <button
+              @click="bulkDelete"
+              class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+            >
+              🗑️ Удалить выбранные
+            </button>
+            <button
+              @click="bulkToggleOperator"
+              class="text-sm text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
+            >
+              🔒 Переключить "Только оператор"
+            </button>
+            <button
+              @click="bulkExport"
+              class="text-sm text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+            >
+              📄 Экспортировать выбранные
+            </button>
+          </div>
+        </div>
+        <button
+          @click="clearSelection"
+          class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+        >
+          Отменить выбор
+        </button>
+      </div>
+    </div>
+
     <!-- Steps table -->
     <div class="card overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
