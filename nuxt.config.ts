@@ -1,10 +1,14 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
+    modules: [
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@vueuse/nuxt'
   ],
+  colorMode: {
+    classSuffix: ''
+  },
   css: ['~/assets/css/main.css'],
   app: {
     head: {
