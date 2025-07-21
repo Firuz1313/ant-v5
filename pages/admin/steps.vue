@@ -151,7 +151,11 @@
               v-for="step in filteredSteps" 
               :key="step.id"
               :class="{ 'opacity-50': step.onlyForOperator && !operatorMode }"
-              class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-move"
+              draggable="true"
+              @dragstart="handleDragStart(step, $event)"
+              @dragover.prevent
+              @drop="handleDrop(step, $event)"
             >
               <!-- Order -->
               <td class="px-6 py-4 whitespace-nowrap">
@@ -439,7 +443,7 @@ const stepsWithMedia = computed(() => (allSteps.value || []).filter(s => s.media
 
 // Mock recent actions
 const recentActions = ref([
-  { id: 1, description: 'Пользователь прошел шаг "Проверка карты"', timestamp: '2 мин назад' },
+  { id: 1, description: 'Пользователь прошел шаг "Проверка карты"', timestamp: '2 ми�� назад' },
   { id: 2, description: 'Пользователь застрял на шаге "Настройка антенны"', timestamp: '5 мин назад' },
   { id: 3, description: 'Завершена диагностика Openbox GOLD', timestamp: '10 мин назад' }
 ])
@@ -544,6 +548,49 @@ const exportSteps = () => {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
+}
+
+// Drag and drop functionality
+let draggedStep = null
+
+const handleDragStart = (step, event) => {
+  draggedStep = step
+  event.dataTransfer.effectAllowed = 'move'
+  event.target.style.opacity = '0.5'
+}
+
+const handleDrop = async (targetStep, event) => {
+  event.preventDefault()
+  event.target.style.opacity = '1'
+
+  if (!draggedStep || draggedStep.id === targetStep.id) {
+    return
+  }
+
+  try {
+    // Update order indices
+    const draggedIndex = draggedStep.order_index
+    const targetIndex = targetStep.order_index
+
+    await $fetch('/api/admin/steps/reorder', {
+      method: 'POST',
+      body: {
+        draggedStepId: draggedStep.id,
+        targetStepId: targetStep.id,
+        draggedIndex,
+        targetIndex
+      }
+    })
+
+    // Refresh steps to show new order
+    await refreshSteps()
+
+  } catch (error) {
+    console.error('Failed to reorder steps:', error)
+    alert('Ошибка при изменении порядка шагов')
+  } finally {
+    draggedStep = null
+  }
 }
 
 // Meta tags
