@@ -5,10 +5,34 @@
 @layer base {
   html {
     font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
   }
-  
+
   body {
-    @apply bg-gray-50 dark:bg-dark-300 transition-colors duration-300 font-inter leading-normal;
+    @apply bg-gray-50 dark:bg-dark-300 transition-all duration-500 font-inter leading-normal;
+    background-attachment: fixed;
+  }
+
+  /* Enhanced dark mode styles */
+  .dark {
+    color-scheme: dark;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
   }
   
   /* Typography defaults */
@@ -39,25 +63,47 @@
   /* Hide elements until hydration is complete */
   .theme-toggle {
     opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    transform: scale(0.9);
   }
 
   .js-loaded .theme-toggle {
     opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Enhanced focus styles */
+  *:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button, a, input, select, textarea {
+    @apply transition-all duration-200 ease-in-out;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transform hover:scale-105 active:scale-95;
   }
-  
+
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-3 px-6 rounded-lg transition-all duration-200;
+    @apply bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 dark:from-gray-700 dark:to-gray-600 dark:hover:from-gray-600 dark:hover:to-gray-500 text-gray-900 dark:text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95;
   }
   
   .card {
-    @apply bg-white dark:bg-dark-100 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300;
+    @apply bg-white dark:bg-dark-100 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 backdrop-blur-sm;
+    background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%);
+  }
+
+  .dark .card {
+    background: linear-gradient(145deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.8) 100%);
+  }
+
+  .card:hover {
+    @apply shadow-2xl transform translate-y-[-2px];
   }
   
   .remote-button {
@@ -128,15 +174,74 @@
   }
 }
 
-/* Animations */
+/* Enhanced Animations */
 @keyframes button-press {
   0% { transform: scale(1); }
   50% { transform: scale(0.95); }
   100% { transform: scale(1); }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .button-press {
   animation: button-press 0.3s ease-in-out;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glow-animation {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.gradient-animation {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.scale-in {
+  animation: scale-in 0.4s ease-out;
 }
 
 /* Device-specific adjustments */
@@ -145,9 +250,18 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
   }
-  
+
   .heading-1 {
     @apply text-3xl lg:text-5xl;
+  }
+
+  /* Mobile-specific optimizations */
+  .card {
+    @apply shadow-md;
+  }
+
+  .btn-primary, .btn-secondary {
+    @apply py-4 px-8;
   }
 }
 
@@ -155,8 +269,71 @@
   .remote-button {
     @apply text-lg;
   }
-  
+
   .tv-screen {
     border-width: 12px;
   }
+
+  /* 4K TV optimizations */
+  .heading-1 {
+    @apply text-7xl;
+  }
+
+  .card {
+    @apply shadow-2xl;
+  }
+}
+
+/* Enhanced component styles */
+.device-card {
+  @apply relative overflow-hidden;
+}
+
+.device-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.device-card:hover::before {
+  left: 100%;
+}
+
+.error-card {
+  @apply relative overflow-hidden border-l-4 border-transparent hover:border-primary-500;
+}
+
+/* Glass morphism effect */
+.glass {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+.dark .glass {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(17, 24, 39, 0.75);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+/* Theme-specific gradients */
+.gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dark .gradient-primary {
+  background: linear-gradient(135deg, #4c51bf 0%, #553c9a 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.dark .gradient-secondary {
+  background: linear-gradient(135deg, #9f7aea 0%, #ed64a6 100%);
 }
