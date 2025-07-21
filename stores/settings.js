@@ -19,7 +19,7 @@ export const useSettingsStore = defineStore('settings', () => {
   })
 
   const isLoading = ref(false)
-  const lastUpdated = ref(null)
+  const lastUpdated = ref(0)
 
   // Actions
   const loadSettings = async () => {
