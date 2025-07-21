@@ -420,6 +420,17 @@ const completedActions = ref([])
 const actionLog = ref([])
 const audioPlayer = ref(null)
 
+// Master request state
+const showMasterRequestModal = ref(false)
+const masterRequestSuccess = ref(false)
+const isSubmittingRequest = ref(false)
+const lastRequestId = ref('')
+const masterRequest = ref({
+  priority: 'medium',
+  contact: '',
+  note: ''
+})
+
 // Load device data
 const { data: devices } = await useLazyFetch('/api/devices')
 const deviceInfo = computed(() => {
@@ -497,7 +508,7 @@ const previousStep = () => {
 }
 
 const completeSteps = () => {
-  logAction('Диагностика завершена')
+  logAction('��иагностика завершена')
   
   // Send completion analytics
   $fetch('/api/analytics', {
@@ -543,7 +554,7 @@ const handleButtonPress = (buttonId) => {
 }
 
 const handleUserConfirmation = (action) => {
-  logAction(`Пользователь выбрал: ${action}`)
+  logAction(`Польз��ватель выбрал: ${action}`)
   
   if (action === 'next') {
     nextStep()
