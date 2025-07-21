@@ -290,7 +290,7 @@
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                 </svg>
               </div>
-              <span>Интеграция с Telegram</span>
+              <span>Интегра��ия с Telegram</span>
             </h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Настройка бота для уведомлений и поддержки
@@ -618,18 +618,18 @@ const mediaSearch = ref('')
 const selectedMedia = ref(null)
 const notification = ref({ show: false, type: 'success', message: '' })
 
+// Use settings store for synchronization
+const settingsStore = useSettingsStore()
+
 // Load settings and media on mount
 onMounted(async () => {
-  try {
-    const settingsData = await $fetch('/api/admin/settings')
-    if (settingsData) {
-      settings.value = { ...settings.value, ...settingsData }
-      selectedDeviceIcon.value = settingsData.defaultDeviceIcon
-      selectedRemote.value = settingsData.defaultRemote
-    }
-  } catch (error) {
-    console.error('Failed to load settings:', error)
-  }
+  // Load settings through store
+  await settingsStore.loadSettings()
+
+  // Sync local state with store
+  settings.value = { ...settings.value, ...settingsStore.settings }
+  selectedDeviceIcon.value = settingsStore.getDefaultDeviceIcon.value
+  selectedRemote.value = settingsStore.getDefaultRemote.value
 
   // Load media files
   try {
