@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Diagnostic Flow</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<h1>Test Diagnostic Flow</h1>
+<p>This page demonstrates how to test the diagnostic interface:</p>
+
+<h2>Step 1: Device Selection</h2>
+<p>Click on Openbox GOLD device</p>
+
+<h2>Step 2: Error Selection</h2>
+<p>Expected errors for Openbox GOLD:</p>
+<ul>
+    <li>🔒 Закодировано (High priority)</li>
+    <li>📵 Нет сигнала (High priority)</li>
+    <li>🔇 Нет звука (Medium priority)</li>
+    <li>📺 Плохое кач��ство (Medium priority)</li>
+</ul>
+
+<h2>Step 3: Diagnostic Interface</h2>
+<p>Should show:</p>
+<ul>
+    <li>TV screen with current step content</li>
+    <li>Remote control with highlighted buttons</li>
+    <li>Step instructions and tips</li>
+    <li>Progress indicator</li>
+    <li>Multiple button highlighting</li>
+</ul>
+
+<script>
+// Test URLs
+console.log('Main page:', window.location.origin + '/');
+console.log('Admin panel:', window.location.origin + '/admin');
+console.log('Steps management:', window.location.origin + '/admin/steps');
+</script>
+</body>
+</html>
