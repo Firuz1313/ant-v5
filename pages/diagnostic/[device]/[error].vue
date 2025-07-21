@@ -91,7 +91,7 @@
                       </span>
                       <div class="flex items-center space-x-2">
                         <span v-if="currentStep.onlyForOperator" class="px-2 py-1 text-xs bg-orange-600 text-white rounded">
-                          🔒 Только оператор
+                          🔒 То��ько оператор
                         </span>
                         <span v-if="currentStep.progress" class="px-2 py-1 text-xs bg-blue-600 text-white rounded">
                           ⏳ В процессе
@@ -146,7 +146,7 @@
             <!-- Default Screen -->
             <div v-else class="text-center">
               <div class="text-8xl mb-6">📺</div>
-              <h3 class="text-3xl font-semibold mb-4">Готов к диагностике</h3>
+              <h3 class="text-3xl font-semibold mb-4">Готов к диагн��стике</h3>
               <p class="text-xl text-gray-400">Выберите проблему для начала</p>
             </div>
           </div>
@@ -322,7 +322,84 @@
       ref="audioPlayer"
       :src="currentStep.audio_url"
       @ended="onAudioEnded"
-    ></audio>
+        ></audio>
+
+    <!-- Master Request Modal -->
+    <div v-if="showMasterRequestModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-bold text-white mb-4">Вызов мастера</h3>
+
+        <div class="space-y-4">
+          <!-- Priority -->
+          <div>
+            <label class="block text-gray-300 text-sm font-medium mb-2">Приоритет</label>
+            <select v-model="masterRequest.priority" class="w-full p-2 bg-gray-700 text-white rounded border border-gray-600">
+              <option value="low">Низкий (в течение дня)</option>
+              <option value="medium">Средний (в течение 2-3 часов)</option>
+              <option value="high">Высокий (в течение часа)</option>
+            </select>
+          </div>
+
+          <!-- Contact -->
+          <div>
+            <label class="block text-gray-300 text-sm font-medium mb-2">Контактный телефон</label>
+            <input
+              v-model="masterRequest.contact"
+              type="tel"
+              placeholder="+7 (XXX) XXX-XX-XX"
+              class="w-full p-2 bg-gray-700 text-white rounded border border-gray-600"
+            >
+          </div>
+
+          <!-- Additional info -->
+          <div>
+            <label class="block text-gray-300 text-sm font-medium mb-2">Дополнительная информация</label>
+            <textarea
+              v-model="masterRequest.note"
+              rows="3"
+              placeholder="Опишите проблему подробнее..."
+              class="w-full p-2 bg-gray-700 text-white rounded border border-gray-600"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="flex space-x-4 mt-6">
+          <button
+            @click="submitMasterRequest"
+            :disabled="isSubmittingRequest"
+            class="flex-1 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 text-white py-2 px-4 rounded font-medium"
+          >
+            {{ isSubmittingRequest ? 'Отправка...' : 'Вызвать мастера' }}
+          </button>
+          <button
+            @click="showMasterRequestModal = false"
+            class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded font-medium"
+          >
+            Отмена
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Master Request Success Modal -->
+    <div v-if="masterRequestSuccess" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-green-800 rounded-lg p-6 max-w-md w-full mx-4">
+        <div class="text-center">
+          <div class="text-green-400 text-6xl mb-4">✅</div>
+          <h3 class="text-xl font-bold text-white mb-4">Заявка отправлена!</h3>
+          <p class="text-green-200 mb-4">
+            Ваша заявка № {{ lastRequestId }} принята в работу.
+            Мастер свяжется с вами в ближайшее время.
+          </p>
+          <button
+            @click="masterRequestSuccess = false"
+            class="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded font-medium"
+          >
+            Понятно
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
