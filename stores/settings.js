@@ -28,7 +28,7 @@ export const useSettingsStore = defineStore('settings', () => {
       const response = await $fetch('/api/admin/settings')
       if (response) {
         settings.value = { ...settings.value, ...response }
-        lastUpdated.value = new Date()
+        lastUpdated.value = Date.now()
       }
     } catch (error) {
       console.error('Failed to load settings:', error)
