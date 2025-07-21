@@ -186,6 +186,88 @@ export const useUserLogger = () => {
     } catch (error) {
       console.error('Failed to send analytics:', error)
     }
+    }
+
+  // Send Telegram notification
+  const sendTelegramNotification = async (type, data) => {
+    try {
+      await $fetch('/api/telegram/notify', {
+        method: 'POST',
+        body: { type, data }
+      })
+    } catch (error) {
+      console.error('Failed to send Telegram notification:', error)
+    }
+  }
+
+  // Check for stuck user and notify
+  const checkStuckUser = async (stepId, stepTitle, timeOnStep) => {
+    const STUCK_THRESHOLD = 2 * 60 * 1000 // 2 minutes
+
+    if (timeOnStep > STUCK_THRESHOLD) {
+      const deviceEvent = userEvents.value.find(e => e.type === 'session_start')
+
+      await sendTelegramNotification('user_stuck', {
+        sessionId: sessionId.value,
+        device: deviceEvent?.deviceId || 'Неизвестно',
+        error: deviceEvent?.errorId || 'Неизвестно',
+        stepTitle,
+        timeStuck: formatDuration(timeOnStep)
+      })
+    }
+  }
+
+  // Notify diagnostic completion
+  const notifyCompletion = async (result, finalStepId, totalSteps, totalTime) => {
+    const deviceEvent = userEvents.value.find(e => e.type === 'session_start')
+    const success = result === 'success'
+
+    await sendTelegramNotification('diagnostic_completed', {
+      sessionId: sessionId.value,
+      device: deviceEvent?.deviceId || 'Неизвестно',
+      error: deviceEvent?.errorId || 'Неизвестно',
+      success,
+      duration: formatDuration(totalTime),
+      stepsCompleted: finalStepId,
+      totalSteps
+    })
+  }
+
+  // Request master assistance
+  const requestMaster = async (priority = 'medium', contact = '', estimatedArrival = '1-2 часа') => {
+    const deviceEvent = userEvents.value.find(e => e.type === 'session_start')
+    const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
+
+    logEvent({
+      type: 'master_request',
+      requestId,
+      priority,
+      contact,
+      estimatedArrival
+    })
+
+    await sendTelegramNotification('master_request', {
+      requestId,
+      device: deviceEvent?.deviceId || 'Неизвестно',
+      error: deviceEvent?.errorId || 'Неизвестно',
+      priority,
+      contact,
+      estimatedArrival
+    })
+
+    return requestId
+  }
+
+  // Format duration helper
+  const formatDuration = (milliseconds) => {
+    const minutes = Math.floor(milliseconds / (1000 * 60))
+    const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000)
+
+    if (minutes > 0) {
+      return `${minutes} мин ${seconds} сек`
+    } else {
+      return `${seconds} сек`
+    }
   }
 
   // Get stuck points analysis
