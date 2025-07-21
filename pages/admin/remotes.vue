@@ -77,7 +77,7 @@
             @click="editRemote(remote)"
             class="flex-1 btn-secondary text-sm"
           >
-            ✏️ Редактировать
+            ✏️ Редакт��ровать
           </button>
           <button
             @click="previewRemote(remote)"
@@ -139,7 +139,7 @@
             <!-- Device Selection -->
             <div v-if="!selectedDevice" class="mb-6">
               <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                Выберите устройство для создания пульта:
+                Выберите уст��ойство для создания пульта:
               </h4>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div
@@ -223,7 +223,7 @@
             
             <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
               <p>{{ previewData.buttons.length }} интерактивных кнопок</p>
-              <p class="mt-2">Нажмите на кнопки д��я тестирования</p>
+              <p class="mt-2">Нажмите на кнопки для тестирования</p>
             </div>
           </div>
         </div>
@@ -319,7 +319,8 @@ const formatDate = (dateString) => {
 
 const getUsageCount = (remoteId) => {
   // Mock usage count - in real app would come from analytics
-  return Math.floor(Math.random() * 100)
+  // Use remoteId for deterministic value to avoid hydration mismatch
+  return (remoteId * 13) % 100
 }
 
 const getButtonIcon = (type) => {
