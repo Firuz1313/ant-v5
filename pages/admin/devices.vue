@@ -152,13 +152,8 @@
 </template>
 
 <script setup>
-// Load devices data
-const devices = await $fetch('/api/devices')
-
-const refreshDevices = async () => {
-  const newDevices = await $fetch('/api/devices')
-  devices.splice(0, devices.length, ...newDevices)
-}
+// Load devices data using useLazyFetch for SSR compatibility
+const { data: devices, refresh: refreshDevices } = await useLazyFetch('/api/devices')
 
 const showCreateModal = ref(false)
 const editingDevice = ref(null)

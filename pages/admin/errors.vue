@@ -186,8 +186,8 @@
 </template>
 
 <script setup>
-// Load devices and errors
-const devices = await $fetch('/api/devices')
+// Load devices and errors using useLazyFetch for SSR compatibility
+const { data: devices } = await useLazyFetch('/api/devices')
 const allErrors = ref([])
 
 const selectedDeviceId = ref('')
