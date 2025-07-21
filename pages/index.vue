@@ -24,7 +24,13 @@
               class="device-card cursor-pointer p-6 text-center card hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               <div class="w-16 h-16 mx-auto mb-4 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
-                <span v-if="device.icon" class="text-3xl">{{ device.icon }}</span>
+                <img
+                  v-if="device.display_icon && device.display_icon.startsWith('/')"
+                  :src="device.display_icon"
+                  :alt="device.name"
+                  class="w-12 h-12 object-contain"
+                >
+                <span v-else-if="device.display_icon" class="text-3xl">{{ device.display_icon }}</span>
                 <svg v-else class="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                 </svg>
