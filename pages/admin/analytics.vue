@@ -91,7 +91,7 @@
       <!-- Device Usage Chart -->
       <div class="card p-6">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          📱 Использование по устройствам
+          📱 Использо��ание по устройствам
         </h3>
         <div class="space-y-4">
           <div 
@@ -120,7 +120,7 @@
       <!-- Error Distribution -->
       <div class="card p-6">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          ⚠️ Распределение ошибок
+          ⚠️ Распредел��ние ошибок
         </h3>
         <div class="space-y-3">
           <div 
@@ -421,7 +421,12 @@ const realTimeStats = ref({
   masterRequests: 5
 })
 
-const lastUpdated = ref(new Date().toLocaleTimeString('ru-RU'))
+const lastUpdated = ref('')
+
+// Set lastUpdated only on client side to avoid hydration mismatch
+onMounted(() => {
+  lastUpdated.value = new Date().toLocaleTimeString('ru-RU')
+})
 
 // Computed properties
 const maxDeviceSessions = computed(() => {
