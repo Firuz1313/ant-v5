@@ -150,45 +150,34 @@ const props = defineProps({
 
 const emit = defineEmits(['back', 'restart'])
 
-// Mock diagnostic steps - will be replaced with API data
-const steps = ref([
-  {
-    id: 1,
-    title: 'Проверка подключения',
-    instruction: 'Убедитесь, что все кабели подключены правильно. Нажмите кнопку POWER на пульте.',
-    tip: 'Проверьте, что антенный кабель плотно подключен к приставке.',
-    highlightedButton: 'power',
-    screenImage: null,
-    audioUrl: null
-  },
-  {
-    id: 2,
-    title: 'Проверка источника сигнала',
-    instruction: 'Нажмите кнопку SOURCE или INPUT на пульте для выбора правильного источника сигнала.',
-    tip: 'Выберите тот же источник, к которому подключена ваша приставка.',
-    highlightedButton: 'source',
-    screenImage: null,
-    audioUrl: null
-  },
-  {
-    id: 3,
-    title: 'Поиск каналов',
-    instruction: 'Нажмите кнопку MENU и найдите раздел "Поиск каналов" или "Автопоиск".',
-    tip: 'Автопоиск может занять несколько минут.',
-    highlightedButton: 'menu',
-    screenImage: null,
-    audioUrl: null
-  },
-  {
-    id: 4,
-    title: 'Проверка результата',
-    instruction: 'После завершения поиска каналов проверьте, появился ли сигнал.',
-    tip: 'Если проблема не решена, попробуйте перезагрузить приставку.',
-    highlightedButton: null,
-    screenImage: null,
-    audioUrl: null
+// Load diagnostic steps from API
+const steps = ref([])
+
+onMounted(async () => {
+  try {
+    const stepsData = await $fetch(`/api/steps/${props.device.id}/${props.error.id}`)
+    steps.value = stepsData.map(step => ({
+      ...step,
+      highlightedButton: step.highlighted_button,
+      screenImage: step.screen_image,
+      audioUrl: step.audio_url
+    }))
+  } catch (error) {
+    console.error('Failed to load steps:', error)
+    // Fallback to mock data if API fails
+    steps.value = [
+      {
+        id: 1,
+        title: 'Проверка подключения',
+        instruction: 'Убедитесь, что все кабели подключены правильно. Нажмите кнопку POWER на пульте.',
+        tip: 'Проверьте, что антенный кабель плотно подключен к приставке.',
+        highlightedButton: 'power',
+        screenImage: null,
+        audioUrl: null
+      }
+    ]
   }
-])
+})
 
 const currentStep = ref(0)
 const isPlaying = ref(false)
