@@ -336,6 +336,10 @@ const emit = defineEmits(['back', 'restart'])
 // Enhanced reactive state
 const steps = ref([])
 const currentStep = ref(0)
+
+// User logging system
+const logger = useUserLogger()
+const stepStartTime = ref(null)
 const isPlaying = ref(false)
 const audioPlayer = ref(null)
 const completedActions = ref([])
@@ -359,7 +363,7 @@ const hasLinkActions = computed(() => {
 
 // Enhanced methods
 const getStepIcon = (step) => {
-  if (step.title?.includes('Проверить баланс')) return '💳'
+  if (step.title?.includes('Проверить баланс')) return '����'
   if (step.title?.includes('карту')) return '🎫'
   if (step.title?.includes('антенн')) return '📡'
   if (step.title?.includes('поиск')) return '🔍'
