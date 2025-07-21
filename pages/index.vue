@@ -114,8 +114,21 @@
 </template>
 
 <script setup>
+// Import settings store for admin-site synchronization
+const settingsStore = useSettingsStore()
+
 // Load devices from API using useLazyFetch for SSR compatibility
-const { data: devices } = await useLazyFetch('/api/devices')
+const { data: devices, refresh: refreshDevices } = await useLazyFetch('/api/devices', {
+  key: 'devices',
+  default: () => []
+})
+
+// Load settings to ensure synchronization
+onMounted(async () => {
+  await settingsStore.loadSettings()
+  // Refresh devices to apply any new settings
+  await refreshDevices()
+})
 
 // Load errors when device is selected
 const errors = ref([])
