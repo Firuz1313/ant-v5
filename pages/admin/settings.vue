@@ -573,6 +573,39 @@ const showMediaModal = ref(false)
 const modalType = ref('')
 const mediaSearch = ref('')
 const selectedMedia = ref(null)
+const notification = ref({ show: false, type: 'success', message: '' })
+
+// Load settings and media on mount
+onMounted(async () => {
+  try {
+    const settingsData = await $fetch('/api/admin/settings')
+    if (settingsData) {
+      settings.value = { ...settings.value, ...settingsData }
+      selectedDeviceIcon.value = settingsData.defaultDeviceIcon
+      selectedRemote.value = settingsData.defaultRemote
+    }
+  } catch (error) {
+    console.error('Failed to load settings:', error)
+  }
+
+  // Load media files
+  try {
+    const mediaData = await $fetch('/api/admin/media')
+    if (mediaData.success) {
+      mediaFiles.value = mediaData.files
+    }
+  } catch (error) {
+    console.error('Failed to load media:', error)
+  }
+})
+
+// Notification system
+const showNotification = (type, message) => {
+  notification.value = { show: true, type, message }
+  setTimeout(() => {
+    notification.value.show = false
+  }, 3000)
+}
 
 // Settings data
 const settings = ref({
