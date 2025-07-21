@@ -188,7 +188,7 @@
               @click="completeSteps"
               class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
             >
-              ✅ Завершить
+              ��� Завершить
             </button>
           </div>
         </div>
@@ -677,12 +677,15 @@ onMounted(() => {
     })
   }
   
-  if (!selectedError.value) {
+    if (!selectedError.value) {
     throw createError({
       statusCode: 404,
       statusMessage: `Ошибка "${errorParam.value}" не найдена`
     })
   }
+
+  // Initialize user session logging
+  userLogger.initSession(deviceInfo.value?.id, selectedError.value?.id)
 })
 
 // Meta tags
