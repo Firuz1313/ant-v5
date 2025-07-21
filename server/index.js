@@ -2,6 +2,7 @@ const express = require('express')
 const sqlite3 = require('sqlite3').verbose()
 const path = require('path')
 const cors = require('cors')
+const TelegramBotService = require('./services/telegramBot')
 
 const app = express()
 const PORT = process.env.PORT || 3002
