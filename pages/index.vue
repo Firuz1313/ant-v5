@@ -5,7 +5,7 @@
         <h1 class="text-4xl lg:text-6xl font-poppins font-bold text-gray-900 dark:text-white mb-4">
           Диагностика ТВ-приставок
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-inter">
           Пр��стое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
         </p>
       </div>
