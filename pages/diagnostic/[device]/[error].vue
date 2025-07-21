@@ -388,7 +388,7 @@
           <div class="text-green-400 text-6xl mb-4">✅</div>
           <h3 class="text-xl font-bold text-white mb-4">Заявка отправлена!</h3>
           <p class="text-green-200 mb-4">
-            Ваша заявка № {{ lastRequestId }} принята в работу.
+            Ваша заявка № {{ lastRequestId }} принята в рабо��у.
             Мастер свяжется с вами в ближайшее время.
           </p>
           <button
@@ -619,6 +619,50 @@ const onAudioEnded = () => {
 
 const goBack = () => {
   router.back()
+}
+
+// Master request functions
+const submitMasterRequest = async () => {
+  isSubmittingRequest.value = true
+
+  try {
+    // Import user logger
+    const { requestMaster } = useUserLogger()
+
+    // Submit request
+    const requestId = await requestMaster(
+      masterRequest.value.priority,
+      masterRequest.value.contact,
+      getPriorityEstimate(masterRequest.value.priority)
+    )
+
+    lastRequestId.value = requestId
+    showMasterRequestModal.value = false
+    masterRequestSuccess.value = true
+
+    // Reset form
+    masterRequest.value = {
+      priority: 'medium',
+      contact: '',
+      note: ''
+    }
+
+    logAction(`Создана заявка на мастера: ${requestId}`)
+  } catch (error) {
+    console.error('Ошибка отправки заявки:', error)
+    alert('Ошибка при отправке заявки. Попробуйте еще раз.')
+  } finally {
+    isSubmittingRequest.value = false
+  }
+}
+
+const getPriorityEstimate = (priority) => {
+  switch (priority) {
+    case 'high': return 'в течение часа'
+    case 'medium': return 'в течение 2-3 часов'
+    case 'low': return 'в течение дня'
+    default: return 'в ближайшее время'
+  }
 }
 
 // Validate route parameters
