@@ -131,7 +131,7 @@ ${status.recentEvents.map(event => `• ${event}`).join('\n')}
 
 👥 Пользователей: ${stats.totalUsers}
 🎯 Начатых диагностик: ${stats.startedDiagnostics}
-✅ Завершено успешно: ${stats.completedSuccessfully}
+✅ Заве��шено успешно: ${stats.completedSuccessfully}
 ❌ Незавершенных: ${stats.abandoned}
 🔧 Заявок на мастера: ${stats.masterRequests}
 
@@ -297,12 +297,11 @@ ${errorData.stack ? `\`\`\`\n${errorData.stack.slice(0, 500)}\n\`\`\`` : ''}
     })
   }
 
-    async getSystemStatus() {
+      async getSystemStatus() {
     try {
-      const response = await fetch('http://localhost:3000/api/telegram/stats?type=status')
-      if (response.ok) {
-        return await response.json()
-      }
+      // Use internal API call instead of fetch
+      const { getSystemStatus } = require('../api/telegram/stats.get.js')
+      return await getSystemStatus()
     } catch (error) {
       console.error('Failed to fetch system status:', error)
     }
