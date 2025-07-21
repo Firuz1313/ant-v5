@@ -6,7 +6,7 @@
           Диагностика ТВ-приставок
         </h1>
         <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Простое и интуитивное решение ��ля диагностики ошибок ТВ-приставок с пошаговыми инструкциями
+          Простое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
         </p>
       </div>
 
@@ -87,52 +87,18 @@
 </template>
 
 <script setup>
-// Mock data - will be replaced with API calls
-const devices = ref([
-  {
-    id: 1,
-    name: 'Openbox',
-    description: 'Стандартная приставка Openbox'
-  },
-  {
-    id: 2,
-    name: 'HDBOX',
-    description: 'HD приставка HDBOX'
-  },
-  {
-    id: 3,
-    name: 'UCLAN',
-    description: 'Приставка UCLAN'
-  },
-  {
-    id: 4,
-    name: 'Openbox GOLD',
-    description: 'Премиум версия Openbox'
-  }
-])
+// Load devices from API
+const { data: devices } = await $fetch('/api/devices')
 
-const errors = ref([
-  {
-    id: 1,
-    title: 'Нет сигнала',
-    description: 'На экране отображается "Нет сигнала"'
-  },
-  {
-    id: 2,
-    title: 'Нет звука',
-    description: 'Изображение есть, но звук отсутствует'
-  },
-  {
-    id: 3,
-    title: 'Плохое качество',
-    description: 'Изображение нечёткое или с помехами'
-  },
-  {
-    id: 4,
-    title: 'Не включается',
-    description: 'Приставка не реагирует на пульт'
+// Load errors when device is selected
+const errors = ref([])
+
+watch(selectedDevice, async (newDevice) => {
+  if (newDevice) {
+    const errorData = await $fetch(`/api/errors/${newDevice.id}`)
+    errors.value = errorData
   }
-])
+})
 
 const selectedDevice = ref(null)
 const selectedError = ref(null)
@@ -154,7 +120,7 @@ const resetSelection = () => {
 useHead({
   title: 'Диагностика ТВ-приставок - Главная',
   meta: [
-    { name: 'description', content: 'Интерактивная система диагностики ТВ-приставок с пошаг��выми инструкциями' }
+    { name: 'description', content: 'Интерактивная система диагностики ТВ-приставок с пошаговыми инструкциями' }
   ]
 })
 </script>
