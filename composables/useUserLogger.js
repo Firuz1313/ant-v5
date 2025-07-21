@@ -40,16 +40,23 @@ export const useUserLogger = () => {
     console.log('Event logged:', event)
   }
 
-  // Log step events
+    // Log step events
   const logStepEvent = (stepId, stepTitle, action, additionalData = {}) => {
+    const timeOnStep = additionalData.timeOnStep
+
     logEvent({
       type: 'step_action',
       stepId,
       stepTitle,
       action, // 'viewed', 'completed', 'skipped', 'failed'
-      timeOnStep: additionalData.timeOnStep || null,
+      timeOnStep: timeOnStep || null,
       ...additionalData
     })
+
+    // Check if user is stuck and notify
+    if (action === 'viewed' && timeOnStep) {
+      checkStuckUser(stepId, stepTitle, timeOnStep)
+    }
   }
 
   // Log button presses
