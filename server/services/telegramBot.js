@@ -297,75 +297,74 @@ ${errorData.stack ? `\`\`\`\n${errorData.stack.slice(0, 500)}\n\`\`\`` : ''}
     })
   }
 
-  async getSystemStatus() {
-    // Mock implementation - replace with real data
+    async getSystemStatus() {
+    try {
+      const response = await fetch('http://localhost:3000/api/telegram/stats?type=status')
+      if (response.ok) {
+        return await response.json()
+      }
+    } catch (error) {
+      console.error('Failed to fetch system status:', error)
+    }
+
+    // Fallback data
     return {
-      activeSessions: 5,
-      averageDuration: '8 мин',
-      successRate: 85,
-      masterRequests: 3,
-      recentEvents: [
-        '14:30 - Пользователь завершил диагностику Openbox GOLD',
-        '14:25 - Создана заявка на мастера',
-        '14:20 - Пользователь застрял на шаге "Проверка карты"'
-      ]
+      activeSessions: 0,
+      averageDuration: '0 мин',
+      successRate: 0,
+      masterRequests: 0,
+      recentEvents: ['Нет событий']
     }
   }
 
-  async getDailyStats() {
-    // Mock implementation - replace with real data
+    async getDailyStats() {
+    try {
+      const response = await fetch('http://localhost:3000/api/telegram/stats?type=daily')
+      if (response.ok) {
+        return await response.json()
+      }
+    } catch (error) {
+      console.error('Failed to fetch daily stats:', error)
+    }
+
+    // Fallback data
     return {
-      totalUsers: 45,
-      startedDiagnostics: 52,
-      completedSuccessfully: 38,
-      abandoned: 14,
-      masterRequests: 8,
-      topDevices: [
-        { name: 'Openbox GOLD', count: 15 },
-        { name: 'HDBOX', count: 12 },
-        { name: 'Openbox', count: 10 }
-      ],
-      topErrors: [
-        { title: 'Нет сигнала', count: 20 },
-        { title: 'Закодировано', count: 15 },
-        { title: 'Нет звука', count: 8 }
-      ]
+      totalUsers: 0,
+      startedDiagnostics: 0,
+      completedSuccessfully: 0,
+      abandoned: 0,
+      masterRequests: 0,
+      topDevices: [],
+      topErrors: []
     }
   }
 
-  async getActiveUsers() {
-    // Mock implementation - replace with real data from user sessions
-    return [
-      {
-        sessionId: 'sess_123456',
-        device: 'Openbox GOLD',
-        error: 'Закодировано',
-        currentStep: 3,
-        timeOnStep: '1 мин 30 сек',
-        location: 'Москва'
-      },
-      {
-        sessionId: 'sess_789012',
-        device: 'HDBOX',
-        error: 'Нет сигнала',
-        currentStep: 1,
-        timeOnStep: '45 сек',
-        location: 'СПб'
+    async getActiveUsers() {
+    try {
+      const response = await fetch('http://localhost:3000/api/telegram/stats?type=active_users')
+      if (response.ok) {
+        return await response.json()
       }
-    ]
+    } catch (error) {
+      console.error('Failed to fetch active users:', error)
+    }
+
+    // Fallback data
+    return []
   }
 
-  async getStuckUsers() {
-    // Mock implementation - replace with real data
-    return [
-      {
-        sessionId: 'sess_345678',
-        device: 'Openbox GOLD',
-        error: 'Закодировано',
-        stepTitle: 'Проверка карты доступа',
-        stuckTime: '3 мин 20 сек'
+    async getStuckUsers() {
+    try {
+      const response = await fetch('http://localhost:3000/api/telegram/stats?type=stuck_users')
+      if (response.ok) {
+        return await response.json()
       }
-    ]
+    } catch (error) {
+      console.error('Failed to fetch stuck users:', error)
+    }
+
+    // Fallback data
+    return []
   }
 
   async sendInstructionToUser(sessionId, message) {
