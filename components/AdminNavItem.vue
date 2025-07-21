@@ -88,6 +88,14 @@ const iconComponent = computed(() => {
         'fill-rule': 'evenodd',
         d: 'M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z',
         'clip-rule': 'evenodd'
+            })
+    ]),
+    remote: () => h('svg', {
+      fill: 'currentColor',
+      viewBox: '0 0 20 20'
+    }, [
+      h('path', {
+        d: 'M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z'
       })
     ]),
     settings: () => h('svg', { 
