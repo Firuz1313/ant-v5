@@ -1,0 +1,284 @@
+import { d as defineEventHandler } from '../../../nitro/nitro.mjs';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:crypto';
+import 'node:url';
+
+const all_get = defineEventHandler(async (event) => {
+  return [
+    // Openbox GOLD - "Закодировано" error steps
+    {
+      id: 1,
+      device_id: 4,
+      error_id: 9,
+      order_index: 1,
+      title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441 \u0432 \u043B\u0438\u0447\u043D\u043E\u043C \u043A\u0430\u0431\u0438\u043D\u0435\u0442\u0435",
+      instruction: "\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u0438\u043C \u0432\u0430\u0448 \u0431\u0430\u043B\u0430\u043D\u0441 \u0432 \u043B\u0438\u0447\u043D\u043E\u043C \u043A\u0430\u0431\u0438\u043D\u0435\u0442\u0435 \u043F\u0440\u043E\u0432\u0430\u0439\u0434\u0435\u0440\u0430.",
+      tip: "\u041F\u0435\u0440\u0435\u0439\u0434\u0438\u0442\u0435 \u043F\u043E \u0441\u0441\u044B\u043B\u043A\u0435 \u0432 \u043B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442 \u0410\u041D\u0422",
+      screen_image: "/images/tv/account_balance.jpg",
+      actions: [
+        {
+          type: "link",
+          url: "https://ant-personal-cabinet.com",
+          description: "\u0410\u041D\u0422 \u041B\u0438\u0447\u043D\u044B\u0439 \u041A\u0430\u0431\u0438\u043D\u0435\u0442 (WEB)",
+          hideIP: true
+        }
+      ],
+      highlighted_buttons: [],
+      audio_url: "/audio/check_balance.mp3",
+      onlyForOperator: false,
+      media: {
+        type: "image",
+        url: "/images/help/balance_check.jpg",
+        description: "\u0421\u043A\u0440\u0438\u043D\u0448\u043E\u0442 \u043B\u0438\u0447\u043D\u043E\u0433\u043E \u043A\u0430\u0431\u0438\u043D\u0435\u0442\u0430"
+      },
+      created_at: "2024-01-15T10:00:00Z"
+    },
+    {
+      id: 2,
+      device_id: 4,
+      error_id: 9,
+      order_index: 2,
+      title: "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C \u043A\u0430\u0440\u0442\u0443 \u0434\u043E\u0441\u0442\u0443\u043F\u0430",
+      instruction: "\u0417\u0430\u0439\u0434\u0438\u0442\u0435 \u0432 \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u2192 \u041A\u0430\u0440\u0442\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u2192 Subscription Status",
+      tip: "\u0415\u0441\u043B\u0438 \u043A\u0430\u0440\u0442\u0430 \u043D\u0435 \u0432\u0438\u0434\u043D\u0430 \u2014 \u0432\u044B\u0442\u0430\u0449\u0438\u0442\u0435 \u0438 \u0432\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043E\u0431\u0440\u0430\u0442\u043D\u043E",
+      screen_image: "/images/tv/card_access_menu.jpg",
+      actions: [
+        { buttonId: "menu", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 MENU \u0434\u043B\u044F \u0432\u0445\u043E\u0434\u0430 \u0432 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438" },
+        { buttonId: "down", description: '\u041F\u0435\u0440\u0435\u0439\u0434\u0438\u0442\u0435 \u043A \u043F\u0443\u043D\u043A\u0442\u0443 "\u041A\u0430\u0440\u0442\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430"' },
+        { buttonId: "ok", description: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u0432\u044B\u0431\u043E\u0440" }
+      ],
+      highlighted_buttons: ["menu", "down", "ok"],
+      audio_url: "/audio/card_access.mp3",
+      onlyForOperator: false,
+      media: {
+        type: "animation",
+        url: "/animations/card_removal.gif",
+        description: "\u0410\u043D\u0438\u043C\u0430\u0446\u0438\u044F \u0432\u044B\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F \u0438 \u0432\u0441\u0442\u0430\u0432\u043A\u0438 \u043A\u0430\u0440\u0442\u044B"
+      },
+      ifNoResult: {
+        nextStepId: 3,
+        description: "\u0415\u0441\u043B\u0438 \u043A\u0430\u0440\u0442\u0430 \u043D\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0435\u0442\u0441\u044F, \u0432\u044B\u043F\u043E\u043B\u043D\u0438\u0442\u0435 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0439 \u0448\u0430\u0433"
+      },
+      userConfirmation: {
+        question: "\u041A\u0430\u0440\u0442\u0430 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0435\u0442\u0441\u044F \u0432 \u043C\u0435\u043D\u044E?",
+        options: [
+          { text: "\u0414\u0430, \u043A\u0430\u0440\u0442\u0430 \u0432\u0438\u0434\u043D\u0430", action: "next" },
+          { text: "\u041D\u0435\u0442, \u043A\u0430\u0440\u0442\u0430 \u043D\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0435\u0442\u0441\u044F", action: "alternative" }
+        ]
+      },
+      created_at: "2024-01-15T10:05:00Z"
+    },
+    {
+      id: 3,
+      device_id: 4,
+      error_id: 9,
+      order_index: 3,
+      title: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430 \u0430\u043D\u0442\u0435\u043D\u043D\u044B",
+      instruction: "\u0415\u0441\u043B\u0438 \u043A\u0430\u0440\u0442\u0430 \u0430\u043A\u0442\u0438\u0432\u043D\u0430 \u2014 \u043D\u0430\u0436\u043C\u0438\u0442\u0435 Exit \u2192 \u043F\u0435\u0440\u0435\u0439\u0434\u0438\u0442\u0435 \u0432 \u0423\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u2192 \u0423\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u0430\u043D\u0442\u0435\u043D\u043D\u044B",
+      tip: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u044C \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043A \u0441\u043F\u0443\u0442\u043D\u0438\u043A\u0430",
+      screen_image: "/images/tv/antenna_settings.jpg",
+      actions: [
+        { buttonId: "exit", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 EXIT \u0434\u043B\u044F \u0432\u044B\u0445\u043E\u0434\u0430" },
+        { buttonId: "menu", description: "\u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0432 MENU" },
+        { buttonId: "down", description: '\u041D\u0430\u0439\u0434\u0438\u0442\u0435 "\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430"' },
+        { buttonId: "ok", description: '\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 "\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0430 \u0430\u043D\u0442\u0435\u043D\u043D\u044B"' }
+      ],
+      highlighted_buttons: ["exit", "menu", "down", "ok"],
+      audio_url: "/audio/antenna_setup.mp3",
+      onlyForOperator: false,
+      validation: {
+        satellite: "1/15 Express 80",
+        lnbPower: "18v",
+        frequency: "Universal 9750/10600"
+      },
+      created_at: "2024-01-15T10:10:00Z"
+    },
+    // Operator-only step example
+    {
+      id: 4,
+      device_id: 4,
+      error_id: 9,
+      order_index: 4,
+      title: "\u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043D\u043D\u0430\u044F \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0430 \u0441\u0438\u0433\u043D\u0430\u043B\u0430",
+      instruction: "\u041F\u0440\u043E\u0432\u0435\u0434\u0438\u0442\u0435 \u0434\u0435\u0442\u0430\u043B\u044C\u043D\u0443\u044E \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 \u0443\u0440\u043E\u0432\u043D\u044F \u0438 \u043A\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u0441\u0438\u0433\u043D\u0430\u043B\u0430 \u0441 \u0434\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u043C\u0438 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0430\u043C\u0438",
+      tip: "\u042D\u0442\u043E\u0442 \u0448\u0430\u0433 \u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D \u0442\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u043E\u0432 \u0441\u043B\u0443\u0436\u0431\u044B \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0438",
+      screen_image: "/images/tv/advanced_signal.jpg",
+      actions: [
+        { buttonId: "info", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 INFO 5 \u0440\u0430\u0437 \u0434\u043B\u044F \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043D\u043D\u043E\u0439 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438" },
+        { buttonId: "menu", description: "\u0412\u043E\u0439\u0434\u0438\u0442\u0435 \u0432 \u0441\u0435\u0440\u0432\u0438\u0441\u043D\u043E\u0435 \u043C\u0435\u043D\u044E" },
+        { buttonId: "num-9", description: "\u0412\u0432\u0435\u0434\uFFFD\uFFFD\u0442\u0435 \u043A\u043E\u0434 9999" },
+        { buttonId: "ok", description: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u0432\u0445\u043E\u0434" }
+      ],
+      highlighted_buttons: ["info", "menu", "num-9", "ok"],
+      audio_url: "/audio/advanced_diagnostics.mp3",
+      onlyForOperator: true,
+      validation: {
+        signalLevel: { min: 10, max: 90 },
+        signalQuality: { min: 10, max: 90 },
+        errorRate: { max: 5 }
+      },
+      ifNoResult: {
+        nextStepId: 6,
+        description: "\u0415\u0441\u043B\u0438 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u044B \u043D\u0435 \u0432 \u043D\u043E\u0440\u043C\u0435, \u043F\u0435\u0440\u0435\u0439\u0434\u0438\u0442\u0435 \u043A \u0441\u0431\u0440\u043E\u0441\u0443 \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043A"
+      },
+      created_at: "2024-01-15T10:15:00Z"
+    },
+    // Openbox GOLD - "Нет сигнала" error steps
+    {
+      id: 5,
+      device_id: 4,
+      error_id: 10,
+      order_index: 1,
+      title: "\u041F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A\u0430 \u0441\u0438\u0433\u043D\u0430\u043B\u0430 \u043D\u0430 \u0422\u0412",
+      instruction: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0443 Input \u0438\u043B\u0438 Source \u043D\u0430 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0435, \u043F\u0435\u0440\u0435\u043A\u043B\u044E\u0447\u0430\u0439\u0442\u0435 HDMI \u043F\u043E\u043A\u0430 \u043D\u0435 \u043F\u043E\u044F\u0432\u0438\u0442\u0441\u044F \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435",
+      tip: "\u0412\u043E\u0437\u043C\u043E\u0436\u043D\u043E \u0422\u0412 \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u043D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0439 \u0432\u0445\u043E\u0434",
+      screen_image: "/images/tv/blue_screen.jpg",
+      actions: [
+        {
+          type: "tv_action",
+          description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 INPUT/SOURCE \u043D\u0430 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0435",
+          target: "tv_remote"
+        }
+      ],
+      highlighted_buttons: [],
+      audio_url: "/audio/check_tv_input.mp3",
+      onlyForOperator: false,
+      media: {
+        type: "video",
+        url: "/videos/tv_input_switching.mp4",
+        description: "\u0412\u0438\u0434\u0435\u043E-\u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u044F \u043F\u043E \u043F\u0435\u0440\u0435\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044E \u0432\u0445\u043E\u0434\u043E\u0432"
+      },
+      userConfirmation: {
+        question: "\u041F\u043E\u044F\u0432\u0438\u043B\u043E\u0441\u044C \u043B\u0438 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0441\u043B\u0435 \u043F\u0435\u0440\u0435\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u0432\u0445\u043E\u0434\u043E\u0432?",
+        options: [
+          { text: "\u0414\u0430, \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u044F\u0432\u0438\u043B\u043E\u0441\u044C", action: "completion_success" },
+          { text: "\u041D\u0435\u0442, \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u043D\u0435 \u043F\u043E\u044F\u0432\u0438\u043B\u043E\u0441\u044C", action: "next" }
+        ]
+      },
+      created_at: "2024-01-15T11:00:00Z"
+    },
+    {
+      id: 6,
+      device_id: 4,
+      error_id: 10,
+      order_index: 2,
+      title: "\u041F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u043A\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u0441\u0438\u0433\u043D\u0430\u043B\u0430",
+      instruction: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 3 \u0440\u0430\u0437\u0430 \u043A\u043D\u043E\u043F\u043A\u0443 INFO \u043D\u0430 \u043F\u0443\u043B\u044C\u0442\u0435 \u043F\u0440\u0438\u0441\u0442\u0430\u0432\u043A\u0438",
+      tip: "\u041F\u043E\u044F\u0432\u0438\u0442\u0441\u044F \u044D\u043A\u0440\u0430\u043D \u0441 \u043F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u044F\u043C\u0438 \u041A\u0430\u0447\u0435\u0441\u0442\u0432\u043E / \u0423\u0440\u043E\u0432\u0435\u043D\u044C",
+      screen_image: "/images/tv/signal_info.jpg",
+      actions: [
+        { buttonId: "info", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 INFO \u043F\u0435\u0440\u0432\u044B\u0439 \u0440\u0430\u0437" },
+        { buttonId: "info", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 INFO \u0432\u0442\u043E\u0440\u043E\u0439 \u0440\u0430\u0437" },
+        { buttonId: "info", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 INFO \u0442\u0440\u0435\u0442\u0438\u0439 \u0440\u0430\u0437" }
+      ],
+      highlighted_buttons: ["info"],
+      audio_url: "/audio/check_signal.mp3",
+      onlyForOperator: false,
+      validation: {
+        signalLevel: { min: 10, max: 90 },
+        signalQuality: { min: 10, max: 90 }
+      },
+      progress: true,
+      ifNoResult: {
+        nextStepId: 7,
+        description: "\u0415\u0441\u043B\u0438 \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u0438\u0433\u043D\u0430\u043B\u0430 5% \u0438\u043B\u0438 95%, \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u0438\u0442\u0435 \u043A \u043F\u0435\u0440\u0435\u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044E \u043A\u0430\u0431\u0435\u043B\u044F"
+      },
+      created_at: "2024-01-15T11:05:00Z"
+    },
+    // Alternative step for cable reconnection
+    {
+      id: 7,
+      device_id: 4,
+      error_id: 10,
+      order_index: 3,
+      title: "\u041F\u0435\u0440\u0435\u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u043A\u0430\u0431\u0435\u043B\u044F",
+      instruction: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u0438\u0433\u043D\u0430\u043B\u0430 5% \u0438\u043B\u0438 95% \u0443\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u043D\u0430 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0443 \u0441 \u043A\u0430\u0431\u0435\u043B\u0435\u043C. \u041E\u0442\u0441\u043E\u0435\u0434\u0438\u043D\u0438\u0442\u0435 \u0438 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u0435 \u043A\u0430\u0431\u0435\u043B\u044C \u0437\u0430\u043D\u043E\u0432\u043E",
+      tip: "\u0423\u0431\u0435\u0434\u0438\u0442\u0435\u0441\u044C, \u0447\u0442\u043E \u043A\u0430\u0431\u0435\u043B\u044C \u043F\u043B\u043E\u0442\u043D\u043E \u0437\u0430\u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043D",
+      screen_image: "/images/tv/cable_reconnect.jpg",
+      actions: [],
+      highlighted_buttons: [],
+      audio_url: "/audio/reconnect_cable.mp3",
+      onlyForOperator: false,
+      media: {
+        type: "animation",
+        url: "/animations/cable_reconnection.gif",
+        description: "\u0410\u043D\u0438\u043C\u0430\u0446\u0438\u044F \u043E\u0442\u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F \u0438 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u043A\u0430\u0431\u0435\u043B\u044F"
+      },
+      userConfirmation: {
+        question: "\u041F\u0440\u043E\u0431\u043B\u0435\u043C\u0430 \u0440\u0435\u0448\u0435\u043D\u0430 \u043F\u043E\u0441\u043B\u0435 \u043F\u0435\u0440\u0435\u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u043A\u0430\u0431\u0435\u043B\u044F?",
+        options: [
+          { text: "\u0414\u0430, \u0441\u0438\u0433\u043D\u0430\u043B \u043F\u043E\u044F\u0432\u0438\u043B\u0441\u044F", action: "completion_success" },
+          { text: "\u041D\u0435\u0442, \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0430 \u043E\u0441\u0442\u0430\u043B\u0430\u0441\u044C", action: "next" }
+        ]
+      },
+      created_at: "2024-01-15T11:10:00Z"
+    },
+    // Steps for other devices (simplified examples)
+    {
+      id: 8,
+      device_id: 1,
+      error_id: 1,
+      order_index: 1,
+      title: "\u041F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u043A\u0430\u0431\u0435\u043B\u0435\u0439",
+      instruction: "\u0423\u0431\u0435\u0434\u0438\u0442\u0435\u0441\u044C, \u0447\u0442\u043E \u0432\u0441\u0435 \u043A\u0430\u0431\u0435\u043B\u0438 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u044B \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E",
+      tip: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0430\u043D\u0442\u0435\u043D\u043D\u044B\u0439 \u043A\u0430\u0431\u0435\u043B\u044C \u0438 HDMI",
+      screen_image: "/images/tv/check_cables.jpg",
+      actions: [
+        { buttonId: "power", description: "\u0412\u043A\u043B\u044E\u0447\u0438\u0442\u0435 \u043F\u0440\u0438\u0441\u0442\u0430\u0432\u043A\u0443" }
+      ],
+      highlighted_buttons: ["power"],
+      audio_url: null,
+      onlyForOperator: false,
+      created_at: "2024-01-15T09:00:00Z"
+    },
+    {
+      id: 9,
+      device_id: 2,
+      error_id: 5,
+      order_index: 1,
+      title: "\u041F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 HDBOX \u0441\u0438\u0433\u043D\u0430\u043B\u0430",
+      instruction: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0438\u043D\u0434\u0438\u043A\u0430\u0442\u043E\u0440\u044B \u043D\u0430 \u043F\u0435\u0440\u0435\u0434\u043D\u0435\u0439 \u043F\u0430\u043D\u0435\u043B\u0438 HDBOX",
+      tip: "\u0417\u0435\u043B\u0435\u043D\u044B\u0439 \u0438\u043D\u0434\u0438\u043A\u0430\u0442\u043E\u0440 \u043E\u0437\u043D\u0430\u0447\u0430\u0435\u0442 \u0445\u043E\u0440\u043E\u0448\u0438\u0439 \u0441\u0438\u0433\u043D\u0430\u043B",
+      screen_image: "/images/tv/hdbox_indicators.jpg",
+      actions: [
+        { buttonId: "info", description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 INFO \u0434\u043B\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438" }
+      ],
+      highlighted_buttons: ["info"],
+      audio_url: null,
+      onlyForOperator: false,
+      created_at: "2024-01-15T09:30:00Z"
+    },
+    {
+      id: 10,
+      device_id: 3,
+      error_id: 7,
+      order_index: 1,
+      title: "\u041F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0430 UCLAN",
+      instruction: "\u0412\u044B\u043F\u043E\u043B\u043D\u0438\u0442\u0435 \u043F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0443 \u043F\u0440\u0438\u0441\u0442\u0430\u0432\u043A\u0438 UCLAN",
+      tip: "\u041E\u0442\u043A\u043B\u044E\u0447\u0438\u0442\u0435 \u043F\u0438\u0442\u0430\u043D\u0438\u0435 \u043D\u0430 10 \u0441\u0435\u043A\u0443\u043D\u0434",
+      screen_image: "/images/tv/uclan_reboot.jpg",
+      actions: [
+        { buttonId: "power", description: "\u0423\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0439\u0442\u0435 POWER 5 \u0441\u0435\u043A\u0443\u043D\u0434" }
+      ],
+      highlighted_buttons: ["power"],
+      audio_url: null,
+      onlyForOperator: false,
+      userConfirmation: {
+        question: "\u041F\u0440\u0438\u0441\u0442\u0430\u0432\u043A\u0430 \u043F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u043B\u0430\u0441\u044C?",
+        options: [
+          { text: "\u0414\u0430", action: "next" },
+          { text: "\u041D\u0435\u0442", action: "alternative" }
+        ]
+      },
+      created_at: "2024-01-15T08:00:00Z"
+    }
+  ];
+});
+
+export { all_get as default };
+//# sourceMappingURL=all.get.mjs.map
