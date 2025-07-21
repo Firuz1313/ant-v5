@@ -92,7 +92,7 @@ export const useUserLogger = () => {
     })
   }
 
-  // Log completion events
+    // Log completion events
   const logCompletion = (result, finalStepId, totalSteps, totalTime) => {
     logEvent({
       type: 'diagnostic_completion',
@@ -102,6 +102,9 @@ export const useUserLogger = () => {
       totalTime,
       completionRate: finalStepId / totalSteps
     })
+
+    // Notify completion via Telegram
+    notifyCompletion(result, finalStepId, totalSteps, totalTime)
   }
 
   // Get session summary
