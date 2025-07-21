@@ -1,5 +1,4 @@
 const TelegramBot = require('node-telegram-bot-api')
-const StatsHelper = require('../utils/statsHelper')
 
 class TelegramBotService {
     constructor() {
@@ -38,7 +37,7 @@ class TelegramBotService {
       { command: 'stats', description: 'Статистика использования' },
       { command: 'users', description: 'Активные пользователи' },
       { command: 'stuck', description: 'Пользователи, застрявшие на шагах' },
-      { command: 'errors', description: 'Последние ошибки системы' }
+      { command: 'errors', description: 'По��ледние ошибки системы' }
     ])
   }
 
@@ -64,7 +63,7 @@ class TelegramBotService {
 /errors - Последние ошибки
 
 Вы будете получать уведомления о:
-• Пользователя��, застрявших на шагах
+• Пользователях, застрявших на шагах
 • Завершенных диагностиках
 • Критических ошибках
 • Заявках на вызов мастера
@@ -240,7 +239,7 @@ ${stats.topErrors.map(error => `• ${error.title}: ${error.count}`).join('\n')}
 ${icon} *Диагностика ${status}*
 
 👤 Сессия: \`${sessionData.sessionId}\`
-���� Устройство: ${sessionData.device}
+📱 Устройство: ${sessionData.device}
 ❌ Ошибка: ${sessionData.error}
 ⏱️ Длительность: ${sessionData.duration}
 📊 Шагов пройдено: ${sessionData.stepsCompleted}/${sessionData.totalSteps}
