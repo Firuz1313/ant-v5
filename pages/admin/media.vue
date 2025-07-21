@@ -12,7 +12,7 @@
           <span>Медиа-менеджер</span>
         </h1>
         <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">
-          Управление изображениями, иконками и пу��ьтами для системы диагностики
+          Управление изображениями, иконками и пультами для системы диагностики
         </p>
       </div>
       
@@ -24,7 +24,7 @@
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
           </svg>
-          <span>{{ selectMode ? 'Отмена' : 'Выбрать' }}</span>
+          <span>{{ selectMode ? 'Отм��на' : 'Выбрать' }}</span>
         </button>
         
         <button
@@ -445,9 +445,9 @@ const sortBy = ref('name')
 
 // Stats
 const stats = ref({
-  total: 156,
-  icons: 24,
-  remotes: 18,
+  total: 0,
+  icons: 0,
+  remotes: 0,
   steps: 114
 })
 
