@@ -9,8 +9,8 @@ export default defineEventHandler(async (event) => {
       notifications: true,
       autoSync: true,
       mediaPath: '/uploads',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z'
     }
 
     return settings
