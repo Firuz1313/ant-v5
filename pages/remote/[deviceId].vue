@@ -212,15 +212,34 @@
 <script setup>
 const route = useRoute()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 
 // Get device ID from route
 const deviceId = computed(() => route.params.deviceId)
 
 // Load device data
 const { data: devices } = await useLazyFetch('/api/devices')
-const deviceInfo = computed(() => 
+const deviceInfo = computed(() =>
   devices.value?.find(device => device.id == deviceId.value)
 )
+
+// Load settings for default remote
+onMounted(async () => {
+  await settingsStore.loadSettings()
+})
+
+// Computed properties for remote display
+const displayRemoteImage = computed(() => {
+  // Use device-specific remote if available, otherwise use default from settings
+  return deviceInfo.value?.display_remote ||
+         deviceInfo.value?.remote_image ||
+         settingsStore.getDefaultRemote.value?.url ||
+         null
+})
+
+const isUsingDefaultRemote = computed(() => {
+  return !deviceInfo.value?.remote_image && settingsStore.getDefaultRemote.value
+})
 
 // Load errors for this device
 const { data: errors } = await useLazyFetch(`/api/errors/${deviceId.value}`)
