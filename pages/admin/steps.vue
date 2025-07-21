@@ -339,7 +339,7 @@
             <span class="font-semibold text-gray-900 dark:text-white">{{ stepsWithAlternatives }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-600 dark:text-gray-400">С медиа:</span>
+            <span class="text-sm text-gray-600 dark:text-gray-400">С мед��а:</span>
             <span class="font-semibold text-gray-900 dark:text-white">{{ stepsWithMedia }}</span>
           </div>
         </div>
@@ -375,7 +375,7 @@
 // Load initial data
 const { data: devices } = await useLazyFetch('/api/devices')
 const { data: allErrors } = await useLazyFetch('/api/errors/all')
-const { data: allSteps } = await useLazyFetch('/api/steps/all')
+const { data: allSteps, refresh: refreshSteps } = await useLazyFetch('/api/steps/all')
 
 // Reactive state
 const searchQuery = ref('')
