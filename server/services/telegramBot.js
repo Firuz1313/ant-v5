@@ -6,7 +6,7 @@ class TelegramBotService {
     this.bot = null
     this.chatIds = new Set() // Store admin chat IDs
     this.userSessions = new Map() // Track user diagnostic sessions
-    this.statsHelper = new StatsHelper()
+
     
     if (this.token) {
       this.initBot()
@@ -37,7 +37,7 @@ class TelegramBotService {
       { command: 'stats', description: 'Статистика использования' },
       { command: 'users', description: 'Активные пользователи' },
       { command: 'stuck', description: 'Пользователи, застрявшие на шагах' },
-      { command: 'errors', description: 'По��ледние ошибки системы' }
+      { command: 'errors', description: 'Последние ошибки системы' }
     ])
   }
 
@@ -181,7 +181,7 @@ ${stats.topErrors.map(error => `• ${error.title}: ${error.count}`).join('\n')}
           stuckMessage += `${index + 1}. Сессия ${user.sessionId}\n`
           stuckMessage += `   🚨 Застрял на: "${user.stepTitle}"\n`
           stuckMessage += `   ⏰ Время на шаге: ${user.stuckTime}\n`
-          stuckMessage += `   📱 ${user.device} - ${user.error}\n`
+          stuckMessage += `   ���� ${user.device} - ${user.error}\n`
           stuckMessage += `   /help_${user.sessionId} - Помочь\n\n`
         })
       }
