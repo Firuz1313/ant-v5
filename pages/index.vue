@@ -6,7 +6,7 @@
           Диагностика ТВ-приставок
         </h1>
         <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Простое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
+          Пр��стое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
         </p>
       </div>
 
@@ -144,25 +144,35 @@ const resetSelection = () => {
 // Navigation methods
 const startDiagnostic = () => {
   if (selectedDevice.value && selectedError.value) {
-    navigateTo(`/diagnostics/${selectedDevice.value.id}/${selectedError.value.id}`)
+    navigateTo(`/error/${selectedDevice.value.id}/${selectedError.value.id}`)
   }
 }
 
 const goToTV = () => {
-  const query = selectedDevice.value && selectedError.value ?
-    { device: selectedDevice.value.name, error: selectedError.value.title } : {}
-  navigateTo({ path: '/tv', query })
+  if (selectedDevice.value) {
+    const query = selectedError.value ? { error: selectedError.value.id } : {}
+    navigateTo({
+      path: `/tv/${selectedDevice.value.id}`,
+      query
+    })
+  } else {
+    navigateTo('/tv/4') // Default to Openbox GOLD
+  }
 }
 
 const goToRemote = () => {
-  navigateTo('/remote')
+  if (selectedDevice.value) {
+    navigateTo(`/remote/${selectedDevice.value.id}`)
+  } else {
+    navigateTo('/remote/4') // Default to Openbox GOLD
+  }
 }
 
 // Meta tags
 useHead({
   title: 'Диагностика ТВ-приставок - Главная',
   meta: [
-    { name: 'description', content: 'Интерактивная система диагностики ТВ-приставок с пошаговыми инструкциями' }
+    { name: 'description', content: 'Интерактивная система диагностики ТВ-приставок с пошаговыми инстр��кциями' }
   ]
 })
 </script>
