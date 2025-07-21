@@ -34,7 +34,7 @@ class TelegramBotService {
     this.bot.setMyCommands([
       { command: 'start', description: 'Начать работу с ботом' },
       { command: 'help', description: 'Показать справку' },
-      { command: 'status', description: 'Статус системы диагност��ки' },
+      { command: 'status', description: 'Статус системы диагностики' },
       { command: 'stats', description: 'Статистика использования' },
       { command: 'users', description: 'Активные пользователи' },
       { command: 'stuck', description: 'Пользователи, застрявшие на шагах' },
@@ -64,7 +64,7 @@ class TelegramBotService {
 /errors - Последние ошибки
 
 Вы будете получать уведомления о:
-• Пользователях, застрявших на шагах
+• Пользователя��, застрявших на шагах
 • Завершенных диагностиках
 • Критических ошибках
 • Заявках на вызов мастера
@@ -137,7 +137,7 @@ ${status.recentEvents.map(event => `• ${event}`).join('\n')}
 ❌ Незавершенных: ${stats.abandoned}
 🔧 Заявок на мастера: ${stats.masterRequests}
 
-*Популярн��е приставки:*
+*Популярные приставки:*
 ${stats.topDevices.map(device => `• ${device.name}: ${device.count}`).join('\n')}
 
 *Частые ошибки:*
@@ -201,7 +201,7 @@ ${stats.topErrors.map(error => `• ${error.title}: ${error.count}`).join('\n')}
       if (success) {
         this.bot.sendMessage(chatId, `✅ Инструкция отправлена пользователю сессии ${sessionId}`)
       } else {
-        this.bot.sendMessage(chatId, `�� Не удалось отправить инструкцию. Сессия ${sessionId} не найдена.`)
+        this.bot.sendMessage(chatId, `❌ Не удалось отправить инструкцию. Сессия ${sessionId} не найдена.`)
       }
     })
 
@@ -240,7 +240,7 @@ ${stats.topErrors.map(error => `• ${error.title}: ${error.count}`).join('\n')}
 ${icon} *Диагностика ${status}*
 
 👤 Сессия: \`${sessionData.sessionId}\`
-📱 Устройство: ${sessionData.device}
+���� Устройство: ${sessionData.device}
 ❌ Ошибка: ${sessionData.error}
 ⏱️ Длительность: ${sessionData.duration}
 📊 Шагов пройдено: ${sessionData.stepsCompleted}/${sessionData.totalSteps}
@@ -299,73 +299,54 @@ ${errorData.stack ? `\`\`\`\n${errorData.stack.slice(0, 500)}\n\`\`\`` : ''}
     })
   }
 
-      async getSystemStatus() {
+        async getSystemStatus() {
     try {
-      // Use internal API call instead of fetch
-      const { getSystemStatus } = require('../api/telegram/stats.get.js')
-      return await getSystemStatus()
+      return await this.statsHelper.getSystemStatus()
     } catch (error) {
       console.error('Failed to fetch system status:', error)
-    }
-
-    // Fallback data
-    return {
-      activeSessions: 0,
-      averageDuration: '0 мин',
-      successRate: 0,
-      masterRequests: 0,
-      recentEvents: ['Нет событий']
+      return {
+        activeSessions: 0,
+        averageDuration: '0 мин',
+        successRate: 0,
+        masterRequests: 0,
+        recentEvents: ['Нет событий']
+      }
     }
   }
 
-    async getDailyStats() {
+      async getDailyStats() {
     try {
-      const response = await fetch('http://localhost:3000/api/telegram/stats?type=daily')
-      if (response.ok) {
-        return await response.json()
-      }
+      return await this.statsHelper.getDailyStats()
     } catch (error) {
       console.error('Failed to fetch daily stats:', error)
-    }
-
-    // Fallback data
-    return {
-      totalUsers: 0,
-      startedDiagnostics: 0,
-      completedSuccessfully: 0,
-      abandoned: 0,
-      masterRequests: 0,
-      topDevices: [],
-      topErrors: []
+      return {
+        totalUsers: 0,
+        startedDiagnostics: 0,
+        completedSuccessfully: 0,
+        abandoned: 0,
+        masterRequests: 0,
+        topDevices: [],
+        topErrors: []
+      }
     }
   }
 
-    async getActiveUsers() {
+      async getActiveUsers() {
     try {
-      const response = await fetch('http://localhost:3000/api/telegram/stats?type=active_users')
-      if (response.ok) {
-        return await response.json()
-      }
+      return await this.statsHelper.getActiveUsers()
     } catch (error) {
       console.error('Failed to fetch active users:', error)
+      return []
     }
-
-    // Fallback data
-    return []
   }
 
-    async getStuckUsers() {
+      async getStuckUsers() {
     try {
-      const response = await fetch('http://localhost:3000/api/telegram/stats?type=stuck_users')
-      if (response.ok) {
-        return await response.json()
-      }
+      return await this.statsHelper.getStuckUsers()
     } catch (error) {
       console.error('Failed to fetch stuck users:', error)
+      return []
     }
-
-    // Fallback data
-    return []
   }
 
   async sendInstructionToUser(sessionId, message) {
