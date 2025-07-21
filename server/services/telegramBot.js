@@ -64,7 +64,7 @@ class TelegramBotService {
 
 Вы будете получать уведомления о:
 • Пользователях, застрявших на шагах
-• Завершенных диагност��ках
+• Завершенных диагностиках
 • Критических ошибках
 • Заявках на вызов мастера
       `
@@ -136,7 +136,7 @@ ${status.recentEvents.map(event => `• ${event}`).join('\n')}
 ❌ Незавершенных: ${stats.abandoned}
 🔧 Заявок на мастера: ${stats.masterRequests}
 
-*Популярные приставки:*
+*Популярные приставк��:*
 ${stats.topDevices.map(device => `• ${device.name}: ${device.count}`).join('\n')}
 
 *Частые ошибки:*
@@ -310,19 +310,14 @@ ${errorData.stack ? `\`\`\`\n${errorData.stack.slice(0, 500)}\n\`\`\`` : ''}
   }
 
       async getDailyStats() {
-    try {
-      return await this.statsHelper.getDailyStats()
-    } catch (error) {
-      console.error('Failed to fetch daily stats:', error)
-      return {
-        totalUsers: 0,
-        startedDiagnostics: 0,
-        completedSuccessfully: 0,
-        abandoned: 0,
-        masterRequests: 0,
-        topDevices: [],
-        topErrors: []
-      }
+    return {
+      totalUsers: 0,
+      startedDiagnostics: 0,
+      completedSuccessfully: 0,
+      abandoned: 0,
+      masterRequests: 0,
+      topDevices: [],
+      topErrors: []
     }
   }
 
