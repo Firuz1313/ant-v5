@@ -290,7 +290,7 @@
                 @click="clearActionLog"
                 class="text-gray-400 text-xs hover:text-white"
               >
-                Очистить
+                ��чистить
               </button>
             </div>
             <div class="space-y-2">
@@ -406,6 +406,9 @@
 <script setup>
 const route = useRoute()
 const router = useRouter()
+
+// Initialize user logger
+const userLogger = useUserLogger()
 
 // Extract route parameters
 const deviceParam = computed(() => route.params.device)
