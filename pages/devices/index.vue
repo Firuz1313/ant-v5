@@ -7,7 +7,7 @@
           Выберите ТВ-приставку
         </h1>
         <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Выберите модель вашей ТВ-приставки д��я начала диагностики
+          Выберите модель вашей ТВ-приставки для начала диагностики
         </p>
         <NuxtLink 
           to="/" 
@@ -124,7 +124,7 @@ const popularDevices = computed(() => {
   
   return devices.value.map(device => ({
     ...device,
-    usage: Math.floor(Math.random() * 30) + 10 // Mock usage percentage
+    usage: (device.id * 7) % 30 + 10 // Mock usage percentage (deterministic)
   })).sort((a, b) => b.usage - a.usage).slice(0, 4)
 })
 
