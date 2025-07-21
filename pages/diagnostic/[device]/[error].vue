@@ -272,6 +272,13 @@
               >
                 Очистить
               </button>
+                          <button
+                @click="showMasterRequestModal = true"
+                class="p-2 bg-orange-600 text-white text-sm rounded hover:bg-orange-700 flex items-center space-x-1"
+              >
+                <span>🔧</span>
+                <span>Вызвать мастера</span>
+              </button>
             </div>
           </div>
 
@@ -552,7 +559,7 @@ useHead({
     { 
       name: 'description', 
       content: computed(() => 
-        `Интерактивная диагностика проблемы "${selectedError.value?.title}" для устройства ${deviceInfo.value?.name}`
+        `Интерактивная диа��ностика проблемы "${selectedError.value?.title}" для устройства ${deviceInfo.value?.name}`
       )
     }
   ]
