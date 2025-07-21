@@ -22,6 +22,10 @@ const db = new sqlite3.Database(path.join(__dirname, 'database.sqlite'), (err) =
   }
 })
 
+// Initialize Telegram Bot
+const telegramBot = TelegramBotService.getInstance()
+console.log('Telegram bot service initialized')
+
 // Database initialization
 function initializeDatabase() {
   // Create tables
