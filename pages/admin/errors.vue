@@ -4,7 +4,7 @@
       <div>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Управление ошибками</h1>
         <p class="mt-2 text-gray-600 dark:text-gray-400">
-          Настройте типы ошибок для каждой приставки
+          Настройт�� типы ошибок для каждой приставки
         </p>
       </div>
       <button
@@ -188,7 +188,7 @@
 <script setup>
 // Load devices and errors using useLazyFetch for SSR compatibility
 const { data: devices } = await useLazyFetch('/api/devices')
-const allErrors = ref([])
+const { data: allErrors, refresh: refreshErrors } = await useLazyFetch('/api/errors/all')
 
 const selectedDeviceId = ref('')
 const showCreateModal = ref(false)
@@ -198,21 +198,9 @@ const loading = ref(false)
 const errorForm = ref({
   device_id: '',
   title: '',
-  description: ''
-})
-
-// Load all errors for all devices
-onMounted(async () => {
-    if (devices.value) {
-    const errorPromises = devices.value.map(device => 
-    $fetch(`/api/errors/${device.id}`).then(errors => 
-      errors.map(error => ({ ...error, device_id: device.id }))
-    )
-  )
-  
-      const errorArrays = await Promise.all(errorPromises)
-    allErrors.value = errorArrays.flat()
-  }
+  description: '',
+  icon: '⚠️',
+  severity: 'medium'
 })
 
 const filteredErrors = computed(() => {
