@@ -34,13 +34,16 @@
         <!-- Remote Control (Left/Center) -->
         <div class="lg:col-span-1 flex justify-center">
           <div class="space-y-6">
-            <!-- Device Remote Image (if available) -->
-            <div v-if="deviceInfo?.remote_image" class="text-center">
-              <img 
-                :src="deviceInfo.remote_image" 
-                :alt="`Пульт ${deviceInfo.name}`"
+            <!-- Device Remote Image (with fallback to settings default) -->
+            <div v-if="displayRemoteImage" class="text-center">
+              <img
+                :src="displayRemoteImage"
+                :alt="`Пульт ${deviceInfo?.name || 'устройства'}`"
                 class="max-w-xs mx-auto rounded-lg shadow-lg"
               />
+              <p v-if="isUsingDefaultRemote" class="text-xs text-gray-400 mt-2">
+                Пульт по умолчанию
+              </p>
             </div>
 
             <!-- Interactive Remote Control -->
