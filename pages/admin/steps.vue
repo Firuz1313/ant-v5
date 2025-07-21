@@ -18,7 +18,7 @@
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           ]"
         >
-          {{ operatorMode ? '👤 Режим оператора' : '👥 Режим пользователя' }}
+          {{ operatorMode ? '👤 Режим оператора' : '👥 Режим пользов��теля' }}
         </button>
         <button
           @click="showPreviewModal = true"
@@ -446,6 +446,7 @@ const operatorMode = ref(false)
 const showCreateModal = ref(false)
 const showPreviewModal = ref(false)
 const editingStep = ref(null)
+const selectedSteps = ref([])
 
 // Computed properties
 const filteredErrors = computed(() => {
