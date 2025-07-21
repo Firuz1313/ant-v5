@@ -88,7 +88,7 @@
 
 <script setup>
 // Load devices from API
-const { data: devices } = await $fetch('/api/devices')
+const devices = await $fetch('/api/devices')
 
 // Load errors when device is selected
 const errors = ref([])
