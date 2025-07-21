@@ -78,7 +78,7 @@ class TelegramBotService {
       const helpMessage = `
 *🔧 Команды бота диагностики ТВ*
 
-/status - Текущий статус системы
+/status - Текущи�� статус системы
 /stats - Статистика за сегодня
 /users - Список активных пользователей
 /stuck - Пользователи с проблемами
@@ -136,7 +136,7 @@ ${status.recentEvents.map(event => `• ${event}`).join('\n')}
 ❌ Незавершенных: ${stats.abandoned}
 🔧 Заявок на мастера: ${stats.masterRequests}
 
-*Популярные приставк��:*
+*Популярные приставки:*
 ${stats.topDevices.map(device => `• ${device.name}: ${device.count}`).join('\n')}
 
 *Частые ошибки:*
@@ -251,7 +251,7 @@ ${icon} *Диагностика ${status}*
   async notifyMasterRequest(requestData) {
     if (!this.bot || this.chatIds.size === 0) return
 
-    const priorityIcon = requestData.priority === 'high' ? '🔴' : requestData.priority === 'medium' ? '🟡' : '🟢'
+    const priorityIcon = requestData.priority === 'high' ? '🔴' : requestData.priority === 'medium' ? '🟡' : '��'
     
     const message = `
 🔧 *Новая заявка на мастера*
@@ -322,12 +322,7 @@ ${errorData.stack ? `\`\`\`\n${errorData.stack.slice(0, 500)}\n\`\`\`` : ''}
   }
 
       async getActiveUsers() {
-    try {
-      return await this.statsHelper.getActiveUsers()
-    } catch (error) {
-      console.error('Failed to fetch active users:', error)
-      return []
-    }
+    return []
   }
 
       async getStuckUsers() {
