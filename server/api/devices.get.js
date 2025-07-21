@@ -5,10 +5,12 @@ export default defineEventHandler(async (event) => {
   let defaultRemote = null
 
   try {
-    // In production, this would load from database
-    // For now, we'll use placeholder values
-    defaultIcon = null // Will be replaced by actual settings
-    defaultRemote = null
+    // Load current settings
+    const settings = await $fetch('/api/admin/settings').catch(() => null)
+    if (settings) {
+      defaultIcon = settings.defaultDeviceIcon
+      defaultRemote = settings.defaultRemote
+    }
   } catch (error) {
     console.error('Failed to load settings for devices:', error)
   }
