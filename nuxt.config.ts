@@ -31,10 +31,18 @@ export default defineNuxtConfig({
       ]
     }
   },
-  runtimeConfig: {
+    runtimeConfig: {
     apiSecret: '123',
     public: {
       apiBase: '/api'
+    }
+  },
+  experimental: {
+    payloadExtraction: false
+  },
+  nitro: {
+    experimental: {
+      wasm: false
     }
   }
 })
