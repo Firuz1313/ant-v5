@@ -6,21 +6,27 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const type = query.type || 'status'
 
-    const statsHelper = new StatsHelper()
+    const dataPath = path.join(process.cwd(), 'data', 'user_logs.json')
+
+    let userData = []
+    if (fs.existsSync(dataPath)) {
+      const fileContent = fs.readFileSync(dataPath, 'utf-8')
+      userData = JSON.parse(fileContent)
+    }
 
     switch (type) {
       case 'status':
-        return await statsHelper.getSystemStatus()
-      
+        return await getSystemStatus(userData)
+
       case 'daily':
-        return await statsHelper.getDailyStats()
-      
+        return await getDailyStats(userData)
+
       case 'active_users':
-        return await statsHelper.getActiveUsers()
-      
+        return await getActiveUsers(userData)
+
       case 'stuck_users':
-        return await statsHelper.getStuckUsers()
-      
+        return await getStuckUsers(userData)
+
       default:
         throw new Error(`Неизвестный тип статистики: ${type}`)
     }
