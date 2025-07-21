@@ -1,7 +1,6 @@
 export default defineNuxtConfig({
-  devtools: {
-    enabled: process.env.NODE_ENV === 'development',
-    vscode: {}
+    devtools: {
+    enabled: false
   },
   ssr: true,
   modules: [
