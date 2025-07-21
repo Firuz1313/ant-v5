@@ -136,7 +136,7 @@
           <form @submit.prevent="saveError" @click.stop>
             <div class="bg-white dark:bg-dark-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">
-                {{ editingError ? 'Редактировать ошибку' : 'Добавить ошибку' }}
+                {{ editingError ? 'Редактировать ошибку' : 'Д��бавить ошибку' }}
               </h3>
               
               <div class="space-y-4">
@@ -276,7 +276,9 @@ const editError = (error) => {
   errorForm.value = {
     device_id: error.device_id,
     title: error.title,
-    description: error.description
+    description: error.description,
+    icon: error.icon || '⚠️',
+    severity: error.severity || 'medium'
   }
 }
 
