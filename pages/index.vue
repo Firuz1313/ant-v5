@@ -59,14 +59,25 @@
               @click="selectError(error)"
               class="error-card cursor-pointer p-4 card hover:shadow-lg transform hover:scale-102 transition-all duration-200"
             >
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                  <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                     :class="{
+                       'bg-red-100 dark:bg-red-900': error.severity === 'high',
+                       'bg-yellow-100 dark:bg-yellow-900': error.severity === 'medium',
+                       'bg-gray-100 dark:bg-gray-700': !error.severity
+                     }">
+                  <span v-if="error.icon" class="text-lg">{{ error.icon }}</span>
+                  <svg v-else class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
-                <div>
-                  <h3 class="font-medium text-gray-900 dark:text-white">{{ error.title }}</h3>
+                <div class="flex-1">
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-medium text-gray-900 dark:text-white">{{ error.title }}</h3>
+                    <span v-if="error.severity === 'high'" class="px-2 py-1 text-xs bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 rounded-full">
+                      Высокий приоритет
+                    </span>
+                  </div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">{{ error.description }}</p>
                 </div>
               </div>
