@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 // Analytics API endpoint for user action logging
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
