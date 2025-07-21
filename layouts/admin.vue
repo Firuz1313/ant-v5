@@ -18,29 +18,35 @@
       </div>
 
       <!-- Navigation -->
-      <nav class="flex-1 px-4 py-6 space-y-2">
-        <AdminNavItem to="/admin" icon="home" label="Главная" sidebar />
-        <AdminNavItem to="/admin/devices" icon="device" label="Приставки" sidebar />
-        <AdminNavItem to="/admin/remotes" icon="remote" label="Пульты" sidebar />
-        <AdminNavItem to="/admin/errors" icon="error" label="Ошибки" sidebar />
-        <AdminNavItem to="/admin/steps" icon="steps" label="Шаги" sidebar />
-        <AdminNavItem to="/admin/media" icon="media" label="Медиа" sidebar />
+      <nav class="flex-1 px-4 py-6 space-y-1">
+        <!-- Main Section -->
+        <div class="space-y-1">
+          <p class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+            Основные
+          </p>
+          <AdminNavItem to="/admin" icon="home" label="🏠 Главная" sidebar />
+          <AdminNavItem to="/admin/devices" icon="device" label="📺 Приставки" sidebar />
+          <AdminNavItem to="/admin/remotes" icon="remote" label="🎮 Пульты" sidebar />
+          <AdminNavItem to="/admin/errors" icon="error" label="⚠️ Ошибки" sidebar />
+          <AdminNavItem to="/admin/steps" icon="steps" label="📋 Шаги" sidebar />
+          <AdminNavItem to="/admin/media" icon="media" label="🖼️ Медиа" sidebar />
+        </div>
 
         <!-- Analytics Section -->
-        <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 space-y-1">
           <p class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
             Аналитика
           </p>
-          <AdminNavItem to="/admin/analytics" icon="analytics" label="Аналитика" sidebar />
-          <AdminNavItem to="/admin/reports" icon="reports" label="Отчеты" sidebar />
+          <AdminNavItem to="/admin/analytics" icon="analytics" label="📊 Аналитика" sidebar />
+          <AdminNavItem to="/admin/reports" icon="reports" label="📈 Отчеты" sidebar />
         </div>
 
         <!-- Settings Section -->
-        <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 space-y-1">
           <p class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
             Настройки
           </p>
-          <AdminNavItem to="/admin/settings" icon="settings" label="Настройки" sidebar />
+          <AdminNavItem to="/admin/settings" icon="settings" label="⚙️ Настройки" sidebar />
         </div>
       </nav>
 
@@ -185,7 +191,7 @@ const showNotifications = ref(false)
 const currentPageTitle = computed(() => {
   const pathSegments = route.path.split('/').filter(Boolean)
   const pageMap = {
-    'admin': 'Главная',
+    'admin': 'Главн��я',
     'devices': 'Приставки',
     'errors': 'Ошибки', 
     'steps': 'Шаги',
