@@ -17,7 +17,7 @@
             <option value="user_actions">Действия пользователей</option>
             <option value="step_performance">Производительность шагов</option>
             <option value="device_analytics">Аналитика устройств</option>
-            <option value="error_analysis">Анализ ошибок</option>
+            <option value="error_analysis">Анализ ош��бок</option>
             <option value="operator_metrics">Метрики операторов</option>
           </select>
         </div>
@@ -54,7 +54,7 @@
           :disabled="isGenerating"
           class="btn-primary"
         >
-          {{ isGenerating ? 'Генерация...' : '📊 Сгенерировать отчет' }}
+          {{ isGenerating ? 'Генера��ия...' : '📊 Сгенерировать отчет' }}
         </button>
         <button @click="resetFilters" class="btn-secondary">
           🔄 Сбросить фильтры
@@ -207,8 +207,8 @@ const reports = ref([])
 // Report parameters
 const reportParams = ref({
   type: 'user_actions',
-  startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-  endDate: new Date().toISOString().split('T')[0],
+  startDate: '',
+  endDate: '',
   format: 'json'
 })
 
@@ -328,7 +328,7 @@ const deleteReport = (reportId) => {
 
 const getReportTypeName = (type) => {
   const typeNames = {
-    user_actions: 'Действия пользователей',
+    user_actions: 'Д��йствия пользователей',
     step_performance: 'Производительность шагов',
     device_analytics: 'Аналитика устройств',
     error_analysis: 'Анализ ошибок',
