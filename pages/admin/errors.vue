@@ -159,6 +159,43 @@
                     placeholder="Подробное описание проблемы"
                   ></textarea>
                 </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Иконка
+                    </label>
+                    <select
+                      v-model="errorForm.icon"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="⚠️">⚠️ Предупреждение</option>
+                      <option value="📵">📵 Нет сигнала</option>
+                      <option value="🔇">🔇 Нет звука</option>
+                      <option value="📺">📺 Изображение</option>
+                      <option value="🔌">���� Питание</option>
+                      <option value="💾">💾 Запись</option>
+                      <option value="🌐">🌐 Интернет</option>
+                      <option value="❄️">❄️ Зависание</option>
+                      <option value="🐌">🐌 Медленно</option>
+                      <option value="🔒">🔒 Закодировано</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Приоритет
+                    </label>
+                    <select
+                      v-model="errorForm.severity"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="low">Низкий</option>
+                      <option value="medium">Средний</option>
+                      <option value="high">Высокий</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
             
