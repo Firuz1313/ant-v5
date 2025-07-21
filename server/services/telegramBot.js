@@ -1,4 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api')
+const StatsHelper = require('../utils/statsHelper')
 
 class TelegramBotService {
   constructor() {
@@ -131,7 +132,7 @@ ${status.recentEvents.map(event => `• ${event}`).join('\n')}
 
 👥 Пользователей: ${stats.totalUsers}
 🎯 Начатых диагностик: ${stats.startedDiagnostics}
-✅ Заве��шено успешно: ${stats.completedSuccessfully}
+✅ Завершено успешно: ${stats.completedSuccessfully}
 ❌ Незавершенных: ${stats.abandoned}
 🔧 Заявок на мастера: ${stats.masterRequests}
 
