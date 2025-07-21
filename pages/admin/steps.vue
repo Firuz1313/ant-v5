@@ -166,6 +166,16 @@
               @dragover.prevent
               @drop="handleDrop(step, $event)"
             >
+                            <!-- Checkbox -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  :value="step.id"
+                  v-model="selectedSteps"
+                  class="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+              </td>
+
               <!-- Order -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center space-x-2">
