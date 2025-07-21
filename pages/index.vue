@@ -141,6 +141,23 @@ const resetSelection = () => {
   selectedError.value = null
 }
 
+// Navigation methods
+const startDiagnostic = () => {
+  if (selectedDevice.value && selectedError.value) {
+    navigateTo(`/diagnostics/${selectedDevice.value.id}/${selectedError.value.id}`)
+  }
+}
+
+const goToTV = () => {
+  const query = selectedDevice.value && selectedError.value ?
+    { device: selectedDevice.value.name, error: selectedError.value.title } : {}
+  navigateTo({ path: '/tv', query })
+}
+
+const goToRemote = () => {
+  navigateTo('/remote')
+}
+
 // Meta tags
 useHead({
   title: 'Диагностика ТВ-приставок - Главная',
