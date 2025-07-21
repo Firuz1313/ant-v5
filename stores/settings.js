@@ -47,11 +47,11 @@ export const useSettingsStore = defineStore('settings', () => {
       
       if (response.success) {
         settings.value = { ...settings.value, ...response.settings }
-        lastUpdated.value = new Date()
-        
+        lastUpdated.value = Date.now()
+
         // Trigger refresh of dependent data
         await refreshNuxtData('devices')
-        
+
         return { success: true, message: response.message }
       }
     } catch (error) {
