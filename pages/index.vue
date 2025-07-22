@@ -623,7 +623,7 @@ useHead({
 
 /* Device card enhancements */
 .device-card {
-  @apply group relative overflow-hidden;
+  @apply relative overflow-hidden;
 }
 
 .device-card::before {
