@@ -371,8 +371,21 @@ const { data: devices, refresh: refreshDevices } = await useLazyFetch('/api/devi
   default: () => []
 })
 
-// Performance optimization
-const { initializePerformance, cacheManager } = usePerformance()
+// Performance optimization (optional)
+let initializePerformance = async () => {}
+let cacheManager = {
+  get: () => null,
+  set: () => {},
+  clear: () => {}
+}
+
+try {
+  const performance = usePerformance()
+  initializePerformance = performance.initializePerformance
+  cacheManager = performance.cacheManager
+} catch (error) {
+  console.warn('Performance optimization not available:', error)
+}
 
 // Auto-hide intro after animation
 onMounted(async () => {
