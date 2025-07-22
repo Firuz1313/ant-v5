@@ -304,8 +304,17 @@
 </template>
 
 <script setup>
-// Smart TV navigation support
-const { isSmartTV, updateFocusableElements } = useSmartTVNavigation()
+// Smart TV navigation support (optional)
+let isSmartTV = ref(false)
+let updateFocusableElements = () => {}
+
+try {
+  const smartTVNavigation = useSmartTVNavigation()
+  isSmartTV = smartTVNavigation.isSmartTV
+  updateFocusableElements = smartTVNavigation.updateFocusableElements
+} catch (error) {
+  console.warn('Smart TV navigation not available:', error)
+}
 
 const props = defineProps({
   device: {
@@ -461,7 +470,7 @@ const handleNoResult = () => {
 }
 
 const completeDiagnostic = () => {
-  alert('Диагностика завершена! Если проблема не решена, ��братитесь к специалисту.')
+  alert('Диагностика завершена! Если проблема не решена, обратитесь к специалисту.')
   emit('restart')
 }
 
@@ -492,7 +501,7 @@ onMounted(async () => {
       {
         id: 1,
         title: 'Проверка подключения',
-        instruction: 'Убедитесь, что все кабели подключены правильно. Нажмите кнопку POWER на пульте.',
+        instruction: 'Убе��итесь, что все кабели подключены правильно. Нажмите кнопку POWER на пульте.',
         tip: 'Проверьте, что антенный кабель плотно подключен к приставке.',
         highlighted_buttons: ['power'],
         actions: [{ buttonId: 'power', description: 'Нажмите кнопку питания' }],
