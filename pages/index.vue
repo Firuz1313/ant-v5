@@ -346,8 +346,17 @@
 // Import settings store for admin-site synchronization
 const settingsStore = useSettingsStore()
 
-// Smart TV navigation support
-const { isSmartTV, updateFocusableElements } = useSmartTVNavigation()
+// Smart TV navigation support (optional)
+let isSmartTV = ref(false)
+let updateFocusableElements = () => {}
+
+try {
+  const smartTVNavigation = useSmartTVNavigation()
+  isSmartTV = smartTVNavigation.isSmartTV
+  updateFocusableElements = smartTVNavigation.updateFocusableElements
+} catch (error) {
+  console.warn('Smart TV navigation not available:', error)
+}
 
 // Reactive state
 const showIntro = ref(true)
