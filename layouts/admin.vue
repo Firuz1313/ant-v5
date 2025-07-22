@@ -193,9 +193,12 @@ const currentPageTitle = computed(() => {
   const pageMap = {
     'admin': 'Главная',
     'devices': 'Приставки',
-    'errors': 'Ошибки', 
+    'remotes': 'Пульты',
+    'errors': 'Ошибки',
     'steps': 'Шаги',
     'media': 'Медиа',
+    'analytics': 'Аналитика',
+    'reports': 'Отчеты',
     'settings': 'Настройки'
   }
   return pageMap[pathSegments[pathSegments.length - 1]] || 'Админ-панель'
