@@ -461,7 +461,7 @@ const handleNoResult = () => {
 }
 
 const completeDiagnostic = () => {
-  alert('Диагностика завершена! Если проблема не решена, обратитесь к специалисту.')
+  alert('Диагностика завершена! Если проблема не решена, ��братитесь к специалисту.')
   emit('restart')
 }
 
@@ -931,5 +931,179 @@ useHead({
 @keyframes signal-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* Smart TV specific enhancements */
+.tv-button-enhanced {
+  @apply transform transition-all duration-200;
+}
+
+.tv-button-enhanced:focus {
+  @apply scale-105;
+  outline: 3px solid #fbbf24 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.3) !important;
+}
+
+/* Smart TV responsive adjustments */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .diagnostic-header {
+    @apply p-8;
+  }
+
+  .diagnostic-main {
+    @apply p-8 gap-8;
+  }
+
+  .step-panel {
+    @apply p-8;
+  }
+
+  .remote-card {
+    @apply p-8;
+  }
+
+  .nav-button {
+    @apply text-lg py-4 px-8 min-w-[160px];
+  }
+
+  .step-title-main {
+    @apply text-2xl;
+  }
+
+  .step-instruction {
+    @apply text-lg;
+  }
+
+  .tip-text {
+    @apply text-base;
+  }
+
+  .confirmation-question {
+    @apply text-base;
+  }
+
+  .confirmation-button {
+    @apply text-base py-3 px-4;
+  }
+
+  .action-text {
+    @apply text-base;
+  }
+
+  .instructions-title {
+    @apply text-base;
+  }
+
+  .remote-title {
+    @apply text-xl;
+  }
+
+  .step-indicator {
+    @apply w-12 h-12 text-base;
+  }
+
+  .device-badge {
+    @apply px-4 py-3 text-base;
+  }
+
+  .validation-item {
+    @apply text-base;
+  }
+
+  /* Enhanced focus for TV remote navigation */
+  button:focus,
+  .nav-button:focus {
+    @apply ring-4 ring-yellow-400 ring-opacity-75;
+  }
+
+  /* Cursor hiding for TV */
+  * {
+    cursor: none !important;
+  }
+
+  /* Enhanced visibility for TV viewing */
+  .tv-screen {
+    border-width: 16px;
+    max-width: 1200px;
+    max-height: 675px;
+  }
+
+  .audio-button {
+    @apply w-16 h-16 text-xl;
+  }
+}
+
+/* 4K TV adjustments */
+@media (min-width: 3840px) {
+  .diagnostic-header {
+    @apply p-12;
+  }
+
+  .diagnostic-main {
+    @apply p-12 gap-12;
+  }
+
+  .step-panel {
+    @apply p-12;
+  }
+
+  .tv-screen {
+    border-width: 24px;
+    max-width: 1600px;
+    max-height: 900px;
+  }
+
+  .nav-button {
+    @apply text-xl py-6 px-12 min-w-[200px];
+  }
+
+  .step-title-main {
+    @apply text-3xl;
+  }
+
+  .step-instruction {
+    @apply text-xl;
+  }
+
+  .audio-button {
+    @apply w-20 h-20 text-2xl;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .diagnostic-screen {
+    @apply bg-white text-black;
+  }
+
+  .card {
+    @apply border-2 border-black;
+  }
+
+  .tv-screen {
+    @apply border-black;
+  }
+
+  .nav-button:focus {
+    @apply ring-4 ring-black;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .step-icon,
+  .signal-bar,
+  .status-indicator,
+  .pulse-dot,
+  .audio-indicator {
+    animation: none !important;
+  }
+
+  .nav-button,
+  .confirmation-button,
+  .audio-button {
+    transition: none !important;
+  }
 }
 </style>
