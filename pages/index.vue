@@ -219,7 +219,7 @@
                 @keydown.enter="selectError(error)"
                 @keydown.space.prevent="selectError(error)"
                 tabindex="0"
-                class="error-card cursor-pointer p-6 card hover:shadow-xl transform hover:scale-102 transition-all duration-300 animate-error-appear focus:ring-4 focus:ring-primary-500 focus:ring-opacity-50"
+                class="error-card group cursor-pointer p-6 card hover:shadow-xl transform hover:scale-102 transition-all duration-300 animate-error-appear focus:ring-4 focus:ring-primary-500 focus:ring-opacity-50"
                 :style="{ animationDelay: `${index * 0.05}s` }"
                 :class="{ 'tv-focus-enhanced': isSmartTV }"
               >
