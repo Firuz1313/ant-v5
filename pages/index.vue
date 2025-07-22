@@ -75,7 +75,7 @@
           </div>
           
           <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-inter animate-slide-up" style="animation-delay: 0.4s">
-            Простое и интуитивное решение для диагностики ошибок ТВ-при��тавок с пошаговыми инструкциями
+            Простое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
           </p>
         </div>
 
@@ -92,8 +92,12 @@
                 v-for="(device, index) in devices"
                 :key="device.id"
                 @click="selectDevice(device)"
-                class="device-card cursor-pointer p-6 text-center card hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-device-appear"
+                @keydown.enter="selectDevice(device)"
+                @keydown.space.prevent="selectDevice(device)"
+                tabindex="0"
+                class="device-card cursor-pointer p-6 text-center card hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-device-appear focus:ring-4 focus:ring-primary-500 focus:ring-opacity-50"
                 :style="{ animationDelay: `${index * 0.1}s` }"
+                :class="{ 'tv-focus-enhanced': isSmartTV }"
               >
                 <!-- Device icon with enhanced styling -->
                 <div class="device-icon-container mb-4">
@@ -131,9 +135,10 @@
             <!-- Add custom problem option -->
             <div class="mt-8 text-center">
               <button
-                @click="showCustomProblem = true"
-                class="btn-secondary inline-flex items-center space-x-2 animate-pulse-subtle"
-              >
+              @click="showCustomProblem = true"
+              class="btn-secondary inline-flex items-center space-x-2 animate-pulse-subtle"
+              :class="{ 'tv-button-enhanced': isSmartTV }"
+            >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
                 </svg>
@@ -167,6 +172,8 @@
                 <button
                   @click="resetSelection"
                   class="btn-secondary"
+                  data-action="back"
+                  :class="{ 'tv-button-enhanced': isSmartTV }"
                 >
                   ← Назад
                 </button>
@@ -188,10 +195,11 @@
                     :key="priority"
                     @click="selectedPriority = priority"
                     :class="[
-                      'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                      'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-primary-500',
                       selectedPriority === priority
                         ? 'bg-primary-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600',
+                      { 'tv-button-enhanced': isSmartTV }
                     ]"
                   >
                     {{ priority === 'all' ? 'Все' : priority === 'high' ? 'Критичные' : priority === 'medium' ? 'Важные' : 'Обычные' }}
@@ -206,8 +214,12 @@
                 v-for="(error, index) in filteredErrors"
                 :key="error.id"
                 @click="selectError(error)"
-                class="error-card cursor-pointer p-6 card hover:shadow-xl transform hover:scale-102 transition-all duration-300 animate-error-appear"
+                @keydown.enter="selectError(error)"
+                @keydown.space.prevent="selectError(error)"
+                tabindex="0"
+                class="error-card cursor-pointer p-6 card hover:shadow-xl transform hover:scale-102 transition-all duration-300 animate-error-appear focus:ring-4 focus:ring-primary-500 focus:ring-opacity-50"
                 :style="{ animationDelay: `${index * 0.05}s` }"
+                :class="{ 'tv-focus-enhanced': isSmartTV }"
               >
                 <div class="flex items-start space-x-4">
                   <!-- Priority indicator -->
@@ -332,6 +344,9 @@
 // Import settings store for admin-site synchronization
 const settingsStore = useSettingsStore()
 
+// Smart TV navigation support
+const { isSmartTV, updateFocusableElements } = useSmartTVNavigation()
+
 // Reactive state
 const showIntro = ref(true)
 const showCustomProblem = ref(false)
@@ -399,10 +414,14 @@ const filteredErrors = computed(() => {
 
 const selectDevice = (device) => {
   selectedDevice.value = device
+  // Update focusable elements after device selection
+  nextTick(() => updateFocusableElements())
 }
 
 const selectError = (error) => {
   selectedError.value = error
+  // Update focusable elements after error selection
+  nextTick(() => updateFocusableElements())
 }
 
 const resetSelection = () => {
@@ -410,6 +429,8 @@ const resetSelection = () => {
   selectedError.value = null
   errorSearch.value = ''
   selectedPriority.value = 'all'
+  // Update focusable elements after reset
+  nextTick(() => updateFocusableElements())
 }
 
 const submitCustomProblem = async () => {
