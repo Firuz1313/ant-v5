@@ -1,277 +1,258 @@
-// Enhanced API endpoint for all diagnostic steps with advanced features
 export default defineEventHandler(async (event) => {
-  // Mock comprehensive steps data with all advanced features
-  return [
-    // Openbox GOLD - "Закодировано" error steps
-    {
-      id: 1,
-      device_id: 4,
-      error_id: 9,
-      order_index: 1,
-      title: 'Проверить баланс в личном кабинете',
-      instruction: 'Сначала проверим ваш баланс в личном кабинете провайдера.',
-      tip: 'Перейдите по ссылке в личный кабинет АНТ',
-      screen_image: '/images/tv/account_balance.jpg',
-      actions: [
-        {
-          type: 'link',
-          url: 'https://ant-personal-cabinet.com',
-          description: 'АНТ Личный Кабинет (WEB)',
-          hideIP: true
-        }
-      ],
-      highlighted_buttons: [],
-      audio_url: '/audio/check_balance.mp3',
-      onlyForOperator: false,
-      media: {
-        type: 'image',
-        url: '/images/help/balance_check.jpg',
-        description: 'Скриншот личного кабинета'
-      },
-      created_at: '2024-01-15T10:00:00Z'
-    },
-    {
-      id: 2,
-      device_id: 4,
-      error_id: 9,
-      order_index: 2,
-      title: 'Проверить карту доступа',
-      instruction: 'Зайдите в Настройки → Карта доступа → Subscription Status',
-      tip: 'Если карта не видна — вытащите и вставьте обратно',
-      screen_image: '/images/tv/card_access_menu.jpg',
-      actions: [
-        { buttonId: 'menu', description: 'Нажмите MENU для входа в настройки' },
-        { buttonId: 'down', description: 'Перейдите к пункту "Карта доступа"' },
-        { buttonId: 'ok', description: 'Подтвердите выбор' }
-      ],
-      highlighted_buttons: ['menu', 'down', 'ok'],
-      audio_url: '/audio/card_access.mp3',
-      onlyForOperator: false,
-      media: {
-        type: 'animation',
-        url: '/animations/card_removal.gif',
-        description: 'Анимация вытаскивания и вставки карты'
-      },
-      ifNoResult: {
-        nextStepId: 3,
-        description: 'Если карта не отображается, выполните следующий шаг'
-      },
-      userConfirmation: {
-        question: 'Карта отображается в меню?',
-        options: [
-          { text: 'Да, карта видна', action: 'next' },
-          { text: 'Нет, карта не отображается', action: 'alternative' }
-        ]
-      },
-      created_at: '2024-01-15T10:05:00Z'
-    },
-    {
-      id: 3,
-      device_id: 4,
-      error_id: 9,
-      order_index: 3,
-      title: 'Настройка антенны',
-      instruction: 'Если карта активна — нажмите Exit → перейдите в Установка → Установка антенны',
-      tip: 'Проверьте правильность настроек спутника',
-      screen_image: '/images/tv/antenna_settings.jpg',
-      actions: [
-        { buttonId: 'exit', description: 'Нажмите EXIT для выхода' },
-        { buttonId: 'menu', description: 'Войдите в MENU' },
-        { buttonId: 'down', description: 'Найдите "Установка"' },
-        { buttonId: 'ok', description: 'Выберите "Установка антенны"' }
-      ],
-      highlighted_buttons: ['exit', 'menu', 'down', 'ok'],
-      audio_url: '/audio/antenna_setup.mp3',
-      onlyForOperator: false,
-      validation: {
-        satellite: '1/15 Express 80',
-        lnbPower: '18v',
-        frequency: 'Universal 9750/10600'
-      },
-      created_at: '2024-01-15T10:10:00Z'
-    },
+  try {
+    const query = getQuery(event)
+    const deviceId = query.device_id
+    const errorId = query.error_id
+    const operatorMode = query.operator_mode === 'true'
     
-    // Operator-only step example
-    {
-      id: 4,
-      device_id: 4,
-      error_id: 9,
-      order_index: 4,
-      title: 'Расширенная диагностика сигнала',
-      instruction: 'Проведите детальную проверку уровня и качества сигнала с дополнительными параметрами',
-      tip: 'Этот шаг доступен только для операторов службы поддержки',
-      screen_image: '/images/tv/advanced_signal.jpg',
-      actions: [
-        { buttonId: 'info', description: 'Нажмите INFO 5 раз для расширенной информации' },
-        { buttonId: 'menu', description: 'Войдите в сервисное меню' },
-        { buttonId: 'num-9', description: 'Введ��те код 9999' },
-        { buttonId: 'ok', description: 'Подтвердите вход' }
-      ],
-      highlighted_buttons: ['info', 'menu', 'num-9', 'ok'],
-      audio_url: '/audio/advanced_diagnostics.mp3',
-      onlyForOperator: true,
-      validation: {
-        signalLevel: { min: 10, max: 90 },
-        signalQuality: { min: 10, max: 90 },
-        errorRate: { max: 5 }
-      },
-      ifNoResult: {
-        nextStepId: 6,
-        description: 'Если параметры не в норме, перейдите к сбросу настроек'
-      },
-      created_at: '2024-01-15T10:15:00Z'
-    },
+    // Get all steps from storage
+    const allSteps = await getAllStepsFromStorage()
+    
+    // Filter steps based on query parameters
+    let filteredSteps = allSteps
+    
+    if (deviceId) {
+      filteredSteps = filteredSteps.filter(step => step.device_id == deviceId)
+    }
+    
+    if (errorId) {
+      filteredSteps = filteredSteps.filter(step => step.error_id == errorId)
+    }
+    
+    // Filter operator-only steps if not in operator mode
+    if (!operatorMode) {
+      filteredSteps = filteredSteps.filter(step => !step.onlyForOperator)
+    }
+    
+    // Sort by order index
+    filteredSteps.sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
+    
+    return filteredSteps
 
-    // Openbox GOLD - "Нет сигнала" error steps
+  } catch (error) {
+    console.error('Error getting all steps:', error)
+    
+    // Return mock data if storage fails
+    return generateMockSteps()
+  }
+})
+
+// Helper function to get all steps from storage
+async function getAllStepsFromStorage() {
+  const fs = await import('fs').then(m => m.promises)
+  const path = await import('path')
+  
+  try {
+    const storageDir = path.join(process.cwd(), 'data', 'steps')
+    
+    // Check if directory exists
+    try {
+      await fs.access(storageDir)
+    } catch (error) {
+      // Directory doesn't exist, return empty array
+      return []
+    }
+    
+    const files = await fs.readdir(storageDir)
+    const steps = []
+    
+    for (const file of files) {
+      if (file.endsWith('.json') && file !== 'index.json') {
+        try {
+          const stepData = await fs.readFile(path.join(storageDir, file), 'utf8')
+          const step = JSON.parse(stepData)
+          steps.push(step)
+        } catch (error) {
+          console.error(`Error reading step file ${file}:`, error)
+        }
+      }
+    }
+    
+    return steps
+    
+  } catch (error) {
+    console.error('Error getting all steps from storage:', error)
+    return []
+  }
+}
+
+// Mock data generator for fallback
+function generateMockSteps() {
+  return [
     {
-      id: 5,
-      device_id: 4,
-      error_id: 10,
+      id: 'mock_step_1',
+      device_id: '4',
+      error_id: '1',
       order_index: 1,
-      title: 'Проверка источника сигнала на ТВ',
-      instruction: 'Нажмите кнопку Input или Source на телевизоре, переключайте HDMI пока не появится изображение',
-      tip: 'Возможно ТВ показывает неправильный вход',
-      screen_image: '/images/tv/blue_screen.jpg',
+      title: 'Проверка подключения питания',
+      instruction: 'Убедитесь, что приставка подключена к электросети и на ней горит индикатор питания.',
+      tip: 'Индикатор обычно расположен на передней панели и светится красным или зеленым цветом.',
+      screen_image: null,
+      audio_url: null,
+      highlighted_buttons: ['power'],
       actions: [
         {
-          type: 'tv_action',
-          description: 'Нажмите INPUT/SOURCE на телевизоре',
-          target: 'tv_remote'
+          buttonId: 'power',
+          description: 'Нажмите кнопку питания на пульте'
         }
       ],
-      highlighted_buttons: [],
-      audio_url: '/audio/check_tv_input.mp3',
       onlyForOperator: false,
-      media: {
-        type: 'video',
-        url: '/videos/tv_input_switching.mp4',
-        description: 'Видео-инструкция по переключению входов'
-      },
-      userConfirmation: {
-        question: 'Появилось ли изображение после переключения входов?',
-        options: [
-          { text: 'Да, изображение появилось', action: 'completion_success' },
-          { text: 'Нет, изображение не появилось', action: 'next' }
-        ]
-      },
-      created_at: '2024-01-15T11:00:00Z'
+      critical: false,
+      userConfirmation: null,
+      ifNoResult: null,
+      validation: null,
+      media: null,
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
     },
     {
-      id: 6,
-      device_id: 4,
-      error_id: 10,
+      id: 'mock_step_2',
+      device_id: '4',
+      error_id: '1',
       order_index: 2,
-      title: 'Проверка качества сигнала',
-      instruction: 'Нажмите 3 раза кнопку INFO на пульте приставки',
-      tip: 'Появится экран с показателями Качество / Уровень',
-      screen_image: '/images/tv/signal_info.jpg',
-      actions: [
-        { buttonId: 'info', description: 'Нажмите INFO первый раз' },
-        { buttonId: 'info', description: 'Нажмите INFO второй раз' },
-        { buttonId: 'info', description: 'Нажмите INFO третий раз' }
-      ],
-      highlighted_buttons: ['info'],
-      audio_url: '/audio/check_signal.mp3',
-      onlyForOperator: false,
-      validation: {
-        signalLevel: { min: 10, max: 90 },
-        signalQuality: { min: 10, max: 90 }
-      },
-      progress: true,
-      ifNoResult: {
-        nextStepId: 7,
-        description: 'Если уровень сигнала 5% или 95%, переходите к переподключению кабеля'
-      },
-      created_at: '2024-01-15T11:05:00Z'
-    },
-
-    // Alternative step for cable reconnection
-    {
-      id: 7,
-      device_id: 4,
-      error_id: 10,
-      order_index: 3,
-      title: 'Переподключение кабеля',
-      instruction: 'Уровень сигнала 5% или 95% указывает на проблему с кабелем. Отсоедините и подключите кабель заново',
-      tip: 'Убедитесь, что кабель плотно зафиксирован',
-      screen_image: '/images/tv/cable_reconnect.jpg',
-      actions: [],
+      title: 'Проверка подключения антенного кабеля',
+      instruction: 'Проверьте, что антенный кабель надежно подключен к разъему LNB IN на приставке.',
+      tip: 'Разъем LNB IN обычно находится на задней панели приставки.',
+      screen_image: null,
+      audio_url: null,
       highlighted_buttons: [],
-      audio_url: '/audio/reconnect_cable.mp3',
+      actions: [],
       onlyForOperator: false,
-      media: {
-        type: 'animation',
-        url: '/animations/cable_reconnection.gif',
-        description: 'Анимация отсоединения и подключения кабеля'
-      },
+      critical: true,
       userConfirmation: {
-        question: 'Проблема решена после переподключения кабеля?',
+        question: 'Кабель подключен надежно?',
         options: [
-          { text: 'Да, сигнал появился', action: 'completion_success' },
-          { text: 'Нет, проблема осталась', action: 'next' }
+          { text: 'Да, кабель подключен', action: 'next' },
+          { text: 'Нет, кабель отсоединен', action: 'call_master' }
         ]
       },
-      created_at: '2024-01-15T11:10:00Z'
+      ifNoResult: null,
+      validation: null,
+      media: null,
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
     },
-
-    // Steps for other devices (simplified examples)
     {
-      id: 8,
-      device_id: 1,
-      error_id: 1,
-      order_index: 1,
-      title: 'Проверка подключения кабелей',
-      instruction: 'Убедитесь, что все кабели подключены правильно',
-      tip: 'Проверьте антенный кабель и HDMI',
-      screen_image: '/images/tv/check_cables.jpg',
-      actions: [
-        { buttonId: 'power', description: 'Включите приставку' }
-      ],
-      highlighted_buttons: ['power'],
+      id: 'mock_step_3',
+      device_id: '4',
+      error_id: '1',
+      order_index: 3,
+      title: 'Проверка уровня сигнала',
+      instruction: 'Нажмите кнопку INFO на пульте для отображения информации о сигнале.',
+      tip: 'Уровень сигнала должен быть не менее 60% для стабильной работы.',
+      screen_image: null,
       audio_url: null,
-      onlyForOperator: false,
-      created_at: '2024-01-15T09:00:00Z'
-    },
-    {
-      id: 9,
-      device_id: 2,
-      error_id: 5,
-      order_index: 1,
-      title: 'Проверка HDBOX сигнала',
-      instruction: 'Проверьте индикаторы на передней панели HDBOX',
-      tip: 'Зеленый индикатор означает хороший сигнал',
-      screen_image: '/images/tv/hdbox_indicators.jpg',
-      actions: [
-        { buttonId: 'info', description: 'Нажмите INFO для проверки' }
-      ],
       highlighted_buttons: ['info'],
-      audio_url: null,
+      actions: [
+        {
+          buttonId: 'info',
+          description: 'Нажмите кнопку INFO'
+        }
+      ],
       onlyForOperator: false,
-      created_at: '2024-01-15T09:30:00Z'
+      critical: false,
+      userConfirmation: null,
+      ifNoResult: {
+        nextStepId: 5
+      },
+      validation: {
+        signalLevel: true,
+        signalQuality: true
+      },
+      media: null,
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
     },
     {
-      id: 10,
-      device_id: 3,
-      error_id: 7,
-      order_index: 1,
-      title: 'Перезагрузка UCLAN',
-      instruction: 'Выполните перезагрузку приставки UCLAN',
-      tip: 'Отключите питание на 10 секунд',
-      screen_image: '/images/tv/uclan_reboot.jpg',
-      actions: [
-        { buttonId: 'power', description: 'Удерживайте POWER 5 секунд' }
-      ],
-      highlighted_buttons: ['power'],
+      id: 'mock_step_4',
+      device_id: '4',
+      error_id: '1',
+      order_index: 4,
+      title: 'Автопоиск каналов',
+      instruction: 'Запустите автопоиск каналов через меню настроек приставки.',
+      tip: 'Процесс поиска может занять до 10 минут.',
+      screen_image: null,
       audio_url: null,
+      highlighted_buttons: ['menu', 'ok'],
+      actions: [
+        {
+          buttonId: 'menu',
+          description: 'Откройте главное меню'
+        },
+        {
+          buttonId: 'ok',
+          description: 'Выберите "Поиск каналов"'
+        }
+      ],
       onlyForOperator: false,
+      critical: false,
+      userConfirmation: null,
+      ifNoResult: null,
+      validation: null,
+      progress: {
+        type: 'search',
+        estimatedTime: 600
+      },
+      media: null,
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
+    },
+    {
+      id: 'mock_step_5',
+      device_id: '4',
+      error_id: '1',
+      order_index: 5,
+      title: 'Настройка антенны (для операторов)',
+      instruction: 'Выполните тонкую настройку положения антенны для улучшения качества сигнала.',
+      tip: 'Используйте профессиональный измеритель сигнала для точной настройки.',
+      screen_image: null,
+      audio_url: null,
+      highlighted_buttons: [],
+      actions: [],
+      onlyForOperator: true,
+      critical: false,
+      userConfirmation: null,
+      ifNoResult: null,
+      validation: {
+        signalLevel: true,
+        signalQuality: true
+      },
+      media: null,
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
+    },
+    {
+      id: 'mock_step_6',
+      device_id: '4',
+      error_id: '2',
+      order_index: 1,
+      title: 'Проверка баланса карты',
+      instruction: 'Убедитесь, что на карте доступа достаточно средств для просмотра каналов.',
+      tip: 'Информация о балансе отображается в разделе "Карта доступа" в меню приставки.',
+      screen_image: null,
+      audio_url: null,
+      highlighted_buttons: ['menu'],
+      actions: [
+        {
+          buttonId: 'menu',
+          description: 'Откройте меню и найдите "Карта доступа"'
+        }
+      ],
+      onlyForOperator: false,
+      critical: true,
       userConfirmation: {
-        question: 'Приставка перезагрузилась?',
+        question: 'На карте есть достаточно средств?',
         options: [
-          { text: 'Да', action: 'next' },
-          { text: 'Нет', action: 'alternative' }
+          { text: 'Да, баланс положительный', action: 'next' },
+          { text: 'Нет, нужно пополнить', action: 'completion_success' },
+          { text: 'Не могу проверить', action: 'call_master' }
         ]
       },
-      created_at: '2024-01-15T08:00:00Z'
+      ifNoResult: null,
+      validation: null,
+      media: null,
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
     }
   ]
-})
+}
