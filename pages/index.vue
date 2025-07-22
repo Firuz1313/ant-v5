@@ -75,7 +75,7 @@
           </div>
           
           <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-inter animate-slide-up" style="animation-delay: 0.4s">
-            Простое и интуитивное решение для диагностики ошибок ТВ-приставок с пошаговыми инструкциями
+            Простое и интуитивное решение для диагностики ошибок ТВ-приставок с пош��говыми инструкциями
           </p>
         </div>
 
@@ -103,11 +103,12 @@
                 <div class="device-icon-container mb-4">
                   <div class="device-icon">
                     <img
-                      v-if="device.display_icon && device.display_icon.startsWith('/')"
-                      :src="device.display_icon"
-                      :alt="device.name"
-                      class="w-16 h-16 object-contain"
-                    >
+                  v-if="device.display_icon && device.display_icon.startsWith('/')"
+                  :data-src="device.display_icon"
+                  :alt="device.name"
+                  class="w-16 h-16 object-contain lazy"
+                  loading="lazy"
+                >
                     <span v-else-if="device.display_icon" class="text-4xl">{{ device.display_icon }}</span>
                     <svg v-else class="w-12 h-12 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
@@ -155,11 +156,12 @@
                 <div class="flex items-center space-x-4">
                   <div class="device-icon-small">
                     <img
-                      v-if="selectedDevice.display_icon && selectedDevice.display_icon.startsWith('/')"
-                      :src="selectedDevice.display_icon"
-                      :alt="selectedDevice.name"
-                      class="w-12 h-12 object-contain"
-                    >
+                    v-if="selectedDevice.display_icon && selectedDevice.display_icon.startsWith('/')"
+                    :data-src="selectedDevice.display_icon"
+                    :alt="selectedDevice.name"
+                    class="w-12 h-12 object-contain lazy"
+                    loading="lazy"
+                  >
                     <span v-else-if="selectedDevice.display_icon" class="text-2xl">{{ selectedDevice.display_icon }}</span>
                   </div>
                   <div>
@@ -360,11 +362,29 @@ const { data: devices, refresh: refreshDevices } = await useLazyFetch('/api/devi
   default: () => []
 })
 
+// Performance optimization
+const { initializePerformance, cacheManager } = usePerformance()
+
 // Auto-hide intro after animation
 onMounted(async () => {
+  // Initialize performance optimizations
+  await initializePerformance()
+
   await settingsStore.loadSettings()
+
+  // Try to load devices from cache first
+  const cachedDevices = cacheManager.get('devices')
+  if (cachedDevices) {
+    devices.value = cachedDevices
+  }
+
   await refreshDevices()
-  
+
+  // Cache devices for future use
+  if (devices.value?.length > 0) {
+    cacheManager.set('devices', devices.value, 1800000) // 30 minutes
+  }
+
   setTimeout(() => {
     showIntro.value = false
   }, 3000)
@@ -378,8 +398,21 @@ const selectedError = ref(null)
 watch(selectedDevice, async (newDevice) => {
   if (newDevice) {
     try {
-      const errorData = await $fetch(`/api/errors/${newDevice.id}`)
-      errors.value = errorData
+      // Try cache first
+      const cacheKey = `errors_${newDevice.id}`
+      const cachedErrors = cacheManager.get(cacheKey)
+
+      if (cachedErrors) {
+        errors.value = cachedErrors
+      } else {
+        const errorData = await $fetch(`/api/errors/${newDevice.id}`)
+        errors.value = errorData
+
+        // Cache errors for 15 minutes
+        if (errorData?.length > 0) {
+          cacheManager.set(cacheKey, errorData, 900000)
+        }
+      }
     } catch (error) {
       console.error('Failed to load errors:', error)
       errors.value = []
@@ -441,7 +474,7 @@ const submitCustomProblem = async () => {
       showCustomProblem.value = false
       customProblemText.value = ''
       // Show success message
-      alert('Спасибо! Ваша проблема отправлена нашим специалистам.')
+      alert('Спасибо! Ваша п��облема отправлена нашим специалистам.')
     } catch (error) {
       console.error('Failed to submit custom problem:', error)
     }
@@ -480,7 +513,7 @@ useHead({
   title: 'ANT - Диагностика ТВ-приставок | Поможем за 3 шага',
   meta: [
     { name: 'description', content: 'Интерактивная система диагностики ТВ-приставок ANT с пошаговыми инструкциями. Решите проблемы за 3 простых шага.' },
-    { name: 'keywords', content: 'диагностика, ТВ-приставка, ANT, техподдержка, ремонт, инструкции' },
+    { name: 'keywords', content: 'диагностика, ТВ-приста��ка, ANT, техподдержка, ремонт, инструкции' },
     { property: 'og:title', content: 'ANT - Диагностика ТВ-приставок' },
     { property: 'og:description', content: 'Поможем решить проблемы с ТВ-приставкой за 3 простых шага' },
     { property: 'og:type', content: 'website' },
