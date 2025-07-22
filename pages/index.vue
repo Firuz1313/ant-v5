@@ -794,18 +794,96 @@ useHead({
   animation: animate-pulse-subtle 3s ease-in-out infinite;
 }
 
+/* Smart TV specific enhancements */
+.tv-focus-enhanced {
+  @apply transform transition-all duration-200;
+}
+
+.tv-focus-enhanced:focus {
+  @apply scale-110 shadow-2xl z-20;
+  outline: 4px solid #fbbf24 !important;
+  outline-offset: 4px !important;
+  box-shadow: 0 0 0 8px rgba(251, 191, 36, 0.3) !important;
+}
+
+.tv-button-enhanced {
+  @apply transform transition-all duration-200;
+}
+
+.tv-button-enhanced:focus {
+  @apply scale-105;
+  outline: 3px solid #fbbf24 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.3) !important;
+}
+
 /* Responsive adjustments */
+@media (max-width: 480px) {
+  /* Extra small mobile devices */
+  .container {
+    @apply px-2;
+  }
+
+  .ant-text {
+    @apply text-3xl;
+  }
+
+  .signal-wave {
+    @apply w-16 h-16;
+  }
+
+  .floating-antenna {
+    @apply text-xl;
+  }
+
+  .device-card {
+    @apply p-4;
+  }
+
+  .error-card {
+    @apply p-4;
+  }
+
+  .heading-1 {
+    @apply text-2xl;
+  }
+
+  .slogan-container p {
+    @apply text-xl;
+  }
+}
+
 @media (max-width: 768px) {
   .ant-text {
     @apply text-4xl;
   }
-  
+
   .signal-wave {
     @apply w-20 h-20;
   }
-  
+
   .floating-antenna {
     @apply text-2xl;
+  }
+
+  /* Mobile grid adjustments */
+  .device-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .error-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Tablet specific adjustments */
+  .device-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .error-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -813,13 +891,171 @@ useHead({
   .tv-screen {
     border-width: 12px;
   }
-  
+
   .ant-logo-small {
     @apply w-20 h-20;
   }
-  
+
   .ant-text-small {
     @apply text-base;
+  }
+
+  /* Large desktop enhancements */
+  .device-card {
+    @apply p-8;
+  }
+
+  .error-card {
+    @apply p-8;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    @apply text-lg py-4 px-8;
+  }
+}
+
+/* Smart TV specific styles */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .container {
+    @apply px-8;
+  }
+
+  .device-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .error-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .device-card {
+    @apply p-10;
+  }
+
+  .error-card {
+    @apply p-8;
+  }
+
+  .device-icon {
+    @apply w-24 h-24;
+  }
+
+  .device-icon img,
+  .device-icon svg {
+    @apply w-16 h-16;
+  }
+
+  .device-icon span {
+    @apply text-5xl;
+  }
+
+  /* Enhanced text sizes for TV */
+  .device-card h3 {
+    @apply text-xl;
+  }
+
+  .device-card p {
+    @apply text-base;
+  }
+
+  .error-card h3 {
+    @apply text-xl;
+  }
+
+  .error-card p {
+    @apply text-base;
+  }
+
+  /* Focus improvements for TV remote navigation */
+  .device-card:focus,
+  .error-card:focus {
+    @apply ring-8 ring-yellow-400 ring-opacity-75;
+    transform: scale(1.1);
+  }
+
+  /* Enhanced button styles */
+  .btn-primary,
+  .btn-secondary {
+    @apply text-xl py-5 px-10 min-w-[200px];
+  }
+
+  input[type="text"] {
+    @apply text-lg py-4 px-6;
+  }
+
+  /* Cursor hiding for TV */
+  * {
+    cursor: none !important;
+  }
+}
+
+/* 4K TV adjustments */
+@media (min-width: 3840px) {
+  .device-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3rem;
+  }
+
+  .error-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .device-card {
+    @apply p-12;
+  }
+
+  .error-card {
+    @apply p-10;
+  }
+}
+
+/* High contrast mode for accessibility */
+@media (prefers-contrast: high) {
+  .card {
+    @apply border-2 border-gray-900 dark:border-white;
+  }
+
+  .device-card:focus,
+  .error-card:focus {
+    @apply ring-4 ring-black dark:ring-white;
+  }
+
+  .btn-primary {
+    @apply bg-black text-white border-2 border-black;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black border-2 border-black;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .signal-wave,
+  .floating-antenna,
+  .particle,
+  .animate-slide-up,
+  .animate-device-appear,
+  .animate-error-appear,
+  .animate-pulse-red,
+  .animate-pulse-subtle {
+    animation: none !important;
+  }
+
+  .device-card,
+  .error-card {
+    transition: none !important;
+  }
+
+  .intro-enter-active,
+  .intro-leave-active,
+  .modal-enter-active,
+  .modal-leave-active {
+    transition: none !important;
   }
 }
 </style>
