@@ -640,7 +640,11 @@ useHead({
 }
 
 .device-icon {
-  @apply w-20 h-20 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-primary-200 dark:group-hover:bg-primary-800;
+  @apply w-20 h-20 mx-auto bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center transition-all duration-300;
+}
+
+.group:hover .device-icon {
+  @apply bg-primary-200 dark:bg-primary-800;
 }
 
 .device-signal-indicator {
