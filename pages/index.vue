@@ -95,7 +95,7 @@
                 @keydown.enter="selectDevice(device)"
                 @keydown.space.prevent="selectDevice(device)"
                 tabindex="0"
-                class="device-card cursor-pointer p-6 text-center card hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-device-appear focus:ring-4 focus:ring-primary-500 focus:ring-opacity-50"
+                class="device-card group cursor-pointer p-6 text-center card hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-device-appear focus:ring-4 focus:ring-primary-500 focus:ring-opacity-50"
                 :style="{ animationDelay: `${index * 0.1}s` }"
                 :class="{ 'tv-focus-enhanced': isSmartTV }"
               >
