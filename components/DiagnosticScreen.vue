@@ -3,7 +3,7 @@
     <!-- Progress indicator with enhanced step visualization -->
     <div class="diagnostic-header">
       <div class="flex items-center justify-between">
-        <button @click="$emit('back')" class="btn-secondary flex items-center space-x-2">
+        <button @click="$emit('back')" class="btn-secondary flex items-center space-x-2" data-action="back" :class="{ 'tv-button-enhanced': isSmartTV }">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
           </svg>
@@ -35,7 +35,7 @@
           </div>
         </div>
         
-        <button @click="$emit('restart')" class="btn-secondary flex items-center space-x-2">
+        <button @click="$emit('restart')" class="btn-secondary flex items-center space-x-2" :class="{ 'tv-button-enhanced': isSmartTV }">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
           </svg>
@@ -204,6 +204,7 @@
                   :key="option.text"
                   @click="handleUserChoice(option)"
                   class="confirmation-button"
+                  :class="{ 'tv-button-enhanced': isSmartTV }"
                 >
                   {{ option.text }}
                 </button>
@@ -219,6 +220,8 @@
               v-if="currentStep > 0"
               @click="previousStep"
               class="nav-button nav-back"
+              data-action="previous"
+              :class="{ 'tv-button-enhanced': isSmartTV }"
             >
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
@@ -231,6 +234,8 @@
               @click="nextStep"
               class="nav-button nav-next"
               :disabled="!isStepCompleted()"
+              data-action="next"
+              :class="{ 'tv-button-enhanced': isSmartTV }"
             >
               <span>Далее</span>
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -242,6 +247,7 @@
               v-else-if="isLastStep()"
               @click="completeDiagnostic"
               class="nav-button nav-complete"
+              :class="{ 'tv-button-enhanced': isSmartTV }"
             >
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
@@ -253,6 +259,7 @@
               v-if="currentStepData.ifNoResult"
               @click="handleNoResult"
               class="nav-button nav-alternative"
+              :class="{ 'tv-button-enhanced': isSmartTV }"
             >
               <span>Не помогло</span>
             </button>
@@ -297,6 +304,9 @@
 </template>
 
 <script setup>
+// Smart TV navigation support
+const { isSmartTV, updateFocusableElements } = useSmartTVNavigation()
+
 const props = defineProps({
   device: {
     type: Object,
@@ -389,6 +399,8 @@ const nextStep = () => {
   if (canProceedToNext()) {
     currentStep.value++
     completedActions.value = []
+    // Update focusable elements after step change
+    nextTick(() => updateFocusableElements())
   }
 }
 
@@ -396,6 +408,8 @@ const previousStep = () => {
   if (currentStep.value > 0) {
     currentStep.value--
     completedActions.value = []
+    // Update focusable elements after step change
+    nextTick(() => updateFocusableElements())
   }
 }
 
