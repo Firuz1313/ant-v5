@@ -139,24 +139,228 @@
   animation: button-press 0.3s ease-in-out;
 }
 
-/* Device-specific adjustments */
+/* Enhanced Device-specific adjustments */
 @media (max-width: 768px) {
   .diagnostic-main {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
   }
-  
+
   .heading-1 {
     @apply text-3xl lg:text-5xl;
   }
+
+  /* Mobile-specific card adjustments */
+  .card {
+    @apply rounded-lg shadow-md;
+  }
+
+  /* Mobile navigation */
+  .diagnostic-header {
+    @apply flex-col space-y-3;
+  }
+
+  .diagnostic-header .flex {
+    @apply flex-col space-y-2;
+  }
+
+  /* Mobile step panel */
+  .step-panel {
+    @apply p-3;
+  }
+
+  /* Mobile remote control */
+  .remote-card {
+    @apply p-4;
+  }
 }
 
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .diagnostic-main {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .tv-screen {
+    max-width: 600px;
+    max-height: 337px;
+  }
+
+  .remote-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+/* Large desktop adjustments */
 @media (min-width: 1920px) {
   .remote-button {
     @apply text-lg;
   }
-  
+
   .tv-screen {
     border-width: 12px;
+    max-width: 1200px;
+    max-height: 675px;
+  }
+
+  .diagnostic-container {
+    @apply p-8;
+  }
+
+  .step-panel {
+    @apply p-8;
+  }
+}
+
+/* Smart TV specific styles */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  body {
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+
+  .tv-screen {
+    border-width: 16px;
+    max-width: 1400px;
+    max-height: 787px;
+  }
+
+  .remote-button {
+    @apply text-xl;
+    min-width: 60px;
+    min-height: 60px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    @apply text-lg py-4 px-8;
+  }
+
+  .card {
+    @apply p-8 rounded-2xl;
+  }
+
+  .diagnostic-header {
+    @apply p-8;
+  }
+
+  .step-panel {
+    @apply p-10;
+  }
+
+  /* Large text for TV viewing */
+  .heading-1 {
+    @apply text-6xl lg:text-8xl;
+  }
+
+  .heading-2 {
+    @apply text-4xl;
+  }
+
+  .heading-3 {
+    @apply text-2xl;
+  }
+
+  .body-text {
+    @apply text-lg;
+  }
+
+  /* Enhanced button visibility for TV remotes */
+  .nav-button {
+    @apply text-xl py-4 px-8 min-w-[160px];
+  }
+
+  .step-indicator {
+    @apply w-12 h-12 text-lg;
+  }
+
+  /* TV-specific focus styles for accessibility */
+  button:focus,
+  .remote-button:focus {
+    @apply ring-4 ring-yellow-400 ring-opacity-75 outline-none;
+  }
+
+  /* Enhanced contrast for TV viewing */
+  .text-gray-600 {
+    @apply text-gray-500;
+  }
+
+  .text-gray-400 {
+    @apply text-gray-300;
+  }
+}
+
+/* 4K TV specific adjustments */
+@media (min-width: 3840px) {
+  html {
+    font-size: 150%;
+  }
+
+  .tv-screen {
+    border-width: 24px;
+    max-width: 2000px;
+    max-height: 1125px;
+  }
+
+  .remote-button {
+    min-width: 80px;
+    min-height: 80px;
+  }
+
+  .diagnostic-container {
+    @apply p-16;
+  }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 896px) and (orientation: landscape) {
+  .diagnostic-main {
+    grid-template-columns: 1fr 300px;
+    gap: 1rem;
+  }
+
+  .tv-screen {
+    max-height: 250px;
+  }
+
+  .step-panel {
+    @apply p-2;
+  }
+
+  .step-content {
+    @apply flex-row items-center space-x-4;
+  }
+
+  .step-main {
+    @apply flex-1;
+  }
+
+  .step-navigation {
+    @apply flex-col space-y-2;
+  }
+}
+
+/* Print styles for diagnostic reports */
+@media print {
+  .diagnostic-screen {
+    @apply text-black bg-white;
+  }
+
+  .tv-screen {
+    @apply border-gray-400;
+  }
+
+  .remote-container {
+    @apply hidden;
+  }
+
+  .audio-controls {
+    @apply hidden;
+  }
+
+  .nav-button {
+    @apply hidden;
   }
 }
