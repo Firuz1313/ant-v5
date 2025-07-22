@@ -288,7 +288,7 @@
             <div v-if="filteredErrors.length === 0" class="text-center py-12">
               <div class="text-6xl mb-4">🔍</div>
               <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Ничего не найдено</h3>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">Попробуйте изменить фильтр или поисковый запрос</p>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">Попробуйте измени��ь фильтр или поисковый запрос</p>
               <button @click="errorSearch = ''; selectedPriority = 'all'" class="btn-primary">
                 Сбросить фильтры
               </button>
@@ -296,24 +296,24 @@
           </div>
 
           <!-- Enhanced Diagnostic Interface for Openbox GOLD -->
-          <EnhancedDiagnosticScreen 
-            v-else-if="selectedDevice && selectedDevice.id === 4"
-            :device="selectedDevice" 
-            :error="selectedError"
-            @back="selectedError = null"
-            @restart="resetSelection"
-            class="animate-fade-in"
-          />
-          
-          <!-- Standard Diagnostic Interface for other devices -->
-          <DiagnosticScreen 
-            v-else
-            :device="selectedDevice" 
-            :error="selectedError"
-            @back="selectedError = null"
-            @restart="resetSelection"
-            class="animate-fade-in"
-          />
+        <EnhancedDiagnosticScreen
+          v-else-if="selectedDevice && selectedDevice.id === 4"
+          :device="selectedDevice"
+          :error="selectedError"
+          @back="selectedError = null"
+          @restart="resetSelection"
+          class="animate-fade-in"
+        />
+
+        <!-- Standard Diagnostic Interface for other devices -->
+        <DiagnosticScreen
+          v-else
+          :device="selectedDevice"
+          :error="selectedError"
+          @back="selectedError = null"
+          @restart="resetSelection"
+          class="animate-fade-in"
+        />
         </div>
       </div>
     </div>
